@@ -1,0 +1,28 @@
+version: "3"
+services:
+  prisma:
+    image: prismagraphql/prisma:1.23
+    restart: always
+    ports:
+      - "4466:4466"
+    # logging:
+    #   driver: awslogs
+    #   options:
+    #     awslogs-group: __AWSLOG_GROUP__
+    #     awslogs-region: ap-northeast-2
+    #     awslogs-stream-prefix: __AWSLOG_STREAM_PREFIX__
+    environment:
+      PRISMA_CONFIG: |
+        port: 4466
+        # managementApiSecret: __SECRET_KEY__
+        databases:
+          default:
+            connector: postgres
+            host: host.docker.internal
+            database: ratelink
+            schema: public
+            user: ratelink
+            password: ratelink
+            rawAccess: true
+            port: 5432
+            migrations: false

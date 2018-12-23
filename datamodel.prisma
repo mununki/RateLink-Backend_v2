@@ -1,0 +1,163 @@
+type Account_messagebox @pgTable(name: "account_messagebox") {
+  id: Int! @id @unique
+  msg: String!
+  receiver: Account_myuser
+    @pgRelation(column: "receiver_id")
+    @relation(name: "AccountMessageboxesReceivers")
+  sender: Account_myuser
+    @pgRelation(column: "sender_id")
+    @relation(name: "AccountMessageboxesSenders")
+  time: DateTime!
+}
+
+type Account_myuser @pgTable(name: "account_myuser") {
+  account_messageboxes_receivers: [Account_messagebox!]!
+    @relation(name: "AccountMessageboxesReceivers")
+  account_messageboxes_senders: [Account_messagebox!]!
+    @relation(name: "AccountMessageboxesSenders")
+  account_myuserprofiles: [Account_myuserprofile!]!
+  account_ratereaders_readers: [Account_ratereader!]!
+    @relation(name: "AccountRatereadersReaders")
+  account_ratereaders_showers: [Account_ratereader!]!
+    @relation(name: "AccountRatereadersShowers")
+  django_admin_logs: [Django_admin_log!]!
+  email: String! @unique
+  id: Int! @id @unique
+  is_active: Boolean!
+  is_admin: Boolean!
+  last_login: DateTime
+  nickname: String!
+  password: String!
+  rate_clients: [Rate_client!]!
+  rate_rates: [Rate_rate!]!
+}
+
+type Account_myuserprofile @pgTable(name: "account_myuserprofile") {
+  company: String!
+  id: Int! @id @unique
+  image: String!
+  job_boolean: String!
+  owner: Account_myuser @pgRelation(column: "owner_id")
+  profile_name: String!
+}
+
+type Account_ratereader @pgTable(name: "account_ratereader") {
+  id: Int! @id @unique
+  reader: Account_myuser
+    @pgRelation(column: "reader_id")
+    @relation(name: "AccountRatereadersReaders")
+  relationship_date: DateTime!
+  shower: Account_myuser
+    @pgRelation(column: "shower_id")
+    @relation(name: "AccountRatereadersShowers")
+}
+
+type Auth_group @pgTable(name: "auth_group") {
+  auth_group_permissionses: [Auth_group_permissions!]!
+  id: Int! @id @unique
+  name: String! @unique
+}
+
+type Auth_group_permissions @pgTable(name: "auth_group_permissions") {
+  group: Auth_group @pgRelation(column: "group_id")
+  id: Int! @id @unique
+  permission: Auth_permission @pgRelation(column: "permission_id")
+}
+
+type Auth_permission @pgTable(name: "auth_permission") {
+  auth_group_permissionses: [Auth_group_permissions!]!
+  codename: String! @unique
+  content_type: Django_content_type @pgRelation(column: "content_type_id")
+  id: Int! @id @unique
+  name: String!
+}
+
+type Countrycity_liner @pgTable(name: "countrycity_liner") {
+  id: Int! @id @unique
+  label: String!
+  name: String!
+  rate_rates: [Rate_rate!]!
+}
+
+type Countrycity_location @pgTable(name: "countrycity_location") {
+  country: String!
+  id: Int! @id @unique
+  label: String!
+  name: String!
+  rate_rates_pods: [Rate_rate!]! @relation(name: "RateRatesPods")
+  rate_rates_pols: [Rate_rate!]! @relation(name: "RateRatesPols")
+}
+
+type Django_admin_log @pgTable(name: "django_admin_log") {
+  action_flag: Int!
+  action_time: DateTime!
+  change_message: String!
+  content_type: Django_content_type @pgRelation(column: "content_type_id")
+  id: Int! @id @unique
+  object_id: String
+  object_repr: String!
+  user: Account_myuser @pgRelation(column: "user_id")
+}
+
+type Django_content_type @pgTable(name: "django_content_type") {
+  app_label: String! @unique
+  auth_permissions: [Auth_permission!]!
+  django_admin_logs: [Django_admin_log!]!
+  id: Int! @id @unique
+  model: String! @unique
+}
+
+type Django_migrations @pgTable(name: "django_migrations") {
+  app: String!
+  applied: DateTime!
+  id: Int! @id @unique
+  name: String!
+}
+
+type Django_session @pgTable(name: "django_session") {
+  expire_date: DateTime!
+  id: ID! @id @pgColumn(name: "session_key") @unique
+  session_data: String!
+}
+
+type Rate_client @pgTable(name: "rate_client") {
+  id: Int! @id @unique
+  name: String!
+  rate_rates: [Rate_rate!]!
+  recordedDate: DateTime!
+  remarks: String!
+  salesman: Account_myuser @pgRelation(column: "salesman_id")
+}
+
+type Rate_cntrtype @pgTable(name: "rate_cntrtype") {
+  id: Int! @id @unique
+  name: String!
+  rate_rates: [Rate_rate!]!
+}
+
+type Rate_rate @pgTable(name: "rate_rate") {
+  account: Rate_client @pgRelation(column: "account_id")
+  buying20: Int!
+  buying40: Int!
+  buying4H: Int!
+  deleted: Boolean!
+  dischargingFT: Int!
+  effectiveDate: DateTime!
+  id: Int! @id @unique
+  inputperson: Account_myuser @pgRelation(column: "inputperson_id")
+  liner: Countrycity_liner @pgRelation(column: "liner_id")
+  loadingFT: Int!
+  offeredDate: DateTime!
+  pod: Countrycity_location
+    @pgRelation(column: "pod_id")
+    @relation(name: "RateRatesPods")
+  pol: Countrycity_location
+    @pgRelation(column: "pol_id")
+    @relation(name: "RateRatesPols")
+  recordedDate: DateTime!
+  remark: String!
+  selling20: Int!
+  selling40: Int!
+  selling4H: Int!
+  type: Rate_cntrtype @pgRelation(column: "type_id")
+}
