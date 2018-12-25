@@ -7,7 +7,7 @@
 > The existing backend(https://github.com/mattdamon108/RateLink-Backend)
 
 1. Prisma Server (Docker)
-2. GraphQL API (GraphqlYoga)
+2. GraphQL API (Graphql-Yoga)
 3. Typescript
 
 ### 2. New Backbone
@@ -17,7 +17,7 @@
 
 ## To-dos
 
-- [x] Boilerplating (Prisma S)
+- [x] Boilerplating (Prisma Server)
 - [x] JWT authentication
 - [ ] Profile update
 - [ ] Rate reader & shower update
