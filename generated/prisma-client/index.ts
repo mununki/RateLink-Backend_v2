@@ -2143,9 +2143,9 @@ export interface Account_myuserprofileCreateManyWithoutOwnerInput {
 }
 
 export interface Account_myuserprofileCreateWithoutOwnerInput {
-  company: String;
-  image: String;
-  job_boolean: String;
+  company?: String;
+  image?: String;
+  job_boolean?: String;
   profile_name: String;
 }
 
@@ -4028,9 +4028,9 @@ export interface Account_myuserUpdateManyMutationInput {
 }
 
 export interface Account_myuserprofileCreateInput {
-  company: String;
-  image: String;
-  job_boolean: String;
+  company?: String;
+  image?: String;
+  job_boolean?: String;
   owner?: Account_myuserCreateOneWithoutAccount_myuserprofilesInput;
   profile_name: String;
 }
@@ -5264,10 +5264,10 @@ export interface Account_myuserSubscription
 }
 
 export interface Account_myuserprofile {
-  company: String;
+  company?: String;
   id: Int;
-  image: String;
-  job_boolean: String;
+  image?: String;
+  job_boolean?: String;
   profile_name: String;
 }
 
@@ -6918,10 +6918,10 @@ export interface Account_myuserprofileSubscriptionPayloadSubscription
 }
 
 export interface Account_myuserprofilePreviousValues {
-  company: String;
+  company?: String;
   id: Int;
-  image: String;
-  job_boolean: String;
+  image?: String;
+  job_boolean?: String;
   profile_name: String;
 }
 
@@ -7703,7 +7703,6 @@ export const models: Model[] = [
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `http://localhost:4466`,
-  secret: `moondaddi-ratelink`
+  endpoint: `http://localhost:4466`
 });
 export const prisma = new Prisma();

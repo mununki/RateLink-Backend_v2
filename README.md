@@ -18,4 +18,8 @@
 ## To-dos
 
 - [x] Boilerplating (Prisma S)
-- [ ] JWT authentification
+- [x] JWT authentication
+- [ ] Profile update
+- [ ] Rate reader & shower update
+- [ ] Rate list (w/ showers, date ranges)
+- [ ] Rate search

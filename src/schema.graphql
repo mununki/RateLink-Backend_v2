@@ -1,0 +1,37 @@
+type Query {
+  me: User!
+  getLiners: [Liners!]!
+}
+
+type Mutation {
+  signup(email: String!, password: String!, nickname: String!): authResponse
+  login(email: String!, password: String!): authResponse
+}
+
+type User {
+  id: Int!
+  email: String!
+  nickname: String!
+  password: String!
+  profile: UserProfile!
+}
+
+type UserProfile {
+  id: Int!
+  owner: User!
+  profile_name: String!
+  company: String
+  job_boolean: String
+  image: String
+}
+
+type Liners {
+  id: Int!
+  label: String!
+  name: String!
+}
+
+type authResponse {
+  token: String!
+  user: User!
+}
