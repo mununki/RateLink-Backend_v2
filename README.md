@@ -20,6 +20,6 @@
 - [x] Boilerplating (Prisma Server)
 - [x] JWT authentication
 - [x] Profile update
-- [ ] Rate reader & shower list & update
+- [x] Rate reader & shower list & update
 - [ ] Rate list (w/ showers, date ranges)
 - [ ] Rate search
