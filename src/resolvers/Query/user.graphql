@@ -1,0 +1,20 @@
+type Query {
+  me: User!
+}
+
+type User {
+  id: Int!
+  email: String!
+  nickname: String!
+  password: String!
+  profile: UserProfile!
+}
+
+type UserProfile {
+  id: Int!
+  owner: User!
+  profile_name: String!
+  company: String
+  job_boolean: String
+  image: String
+}

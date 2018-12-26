@@ -33,10 +33,10 @@ type Account_myuser @pgTable(name: "account_myuser") {
 }
 
 type Account_myuserprofile @pgTable(name: "account_myuserprofile") {
-  company: String
+  company: String!
   id: Int! @id @unique
-  image: String
-  job_boolean: String
+  image: String!
+  job_boolean: String!
   owner: Account_myuser @pgRelation(column: "owner_id")
   profile_name: String!
 }

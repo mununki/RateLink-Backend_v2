@@ -15,9 +15,9 @@
   },
   "scripts": {
     "dev": "nodemon --exec ts-node ./src/index.ts",
-    "*predev": "yarn run types",
-    "*pretypes": "gql-merge --out-file ./src/schema.graphql ./src/api/**/*.graphql",
-    "*types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
+    "predev": "yarn types",
+    "pretypes": "gql-merge --out-file ./src/schema.graphql ./src/**/**/*.graphql",
+    "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "postbuild": "cp ./src/*.graphql ./dist/src/",

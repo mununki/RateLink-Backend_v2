@@ -1,8 +1,8 @@
-import { Prisma } from "../../generated/prisma-client";
 import { user } from "./Query/user";
 import { liners } from "./Query/liners";
 import { auth } from "./Mutaion/auth";
 import { User } from "./User";
+import { profile } from "./Mutaion/profile";
 
 export const resolvers = {
   Query: {
@@ -10,13 +10,8 @@ export const resolvers = {
     ...liners
   },
   Mutation: {
-    ...auth
+    ...auth,
+    ...profile
   },
   User
 };
-
-export interface Context {
-  request: any;
-  prisma: Prisma;
-  user: string | undefined;
-}

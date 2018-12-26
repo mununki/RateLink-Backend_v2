@@ -1,0 +1,9 @@
+type Query {
+  getLiners: [Liners!]!
+}
+
+type Liners {
+  id: Int!
+  label: String!
+  name: String!
+}

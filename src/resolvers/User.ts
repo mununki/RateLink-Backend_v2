@@ -1,4 +1,4 @@
-import { Context } from "./index";
+import { Context } from "../types/resolver";
 
 export const User = {
   profile: async (root: any, args: any, ctx: Context) => {

@@ -1,7 +1,6 @@
 import { GraphQLServer } from "graphql-yoga";
 import { Prisma } from "../generated/prisma-client";
 import dotenv from "dotenv";
-// import { typeDefs } from "./schema";
 import { resolvers } from "./resolvers";
 import decodeJWT from "./util/decodeJWT";
 

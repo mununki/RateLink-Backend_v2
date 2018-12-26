@@ -1,4 +1,4 @@
-import { Context } from "../index";
+import { Context } from "../../types/resolver";
 import { comparePW, generatePW } from "../../util/password";
 import createJWT from "../../util/createJWT";
 import { Account_myuser } from "../../../generated/prisma-client";

@@ -1,0 +1,8 @@
+type Mutation {
+  profileUpdate(
+    company: String
+    image: String
+    job_boolean: String
+    profile_name: String
+  ): User!
+}

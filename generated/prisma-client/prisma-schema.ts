@@ -485,10 +485,10 @@ type Account_myuserPreviousValues {
 }
 
 type Account_myuserprofile {
-  company: String
+  company: String!
   id: Int!
-  image: String
-  job_boolean: String
+  image: String!
+  job_boolean: String!
   owner: Account_myuser
   profile_name: String!
 }
@@ -500,9 +500,9 @@ type Account_myuserprofileConnection {
 }
 
 input Account_myuserprofileCreateInput {
-  company: String
-  image: String
-  job_boolean: String
+  company: String!
+  image: String!
+  job_boolean: String!
   owner: Account_myuserCreateOneWithoutAccount_myuserprofilesInput
   profile_name: String!
 }
@@ -513,9 +513,9 @@ input Account_myuserprofileCreateManyWithoutOwnerInput {
 }
 
 input Account_myuserprofileCreateWithoutOwnerInput {
-  company: String
-  image: String
-  job_boolean: String
+  company: String!
+  image: String!
+  job_boolean: String!
   profile_name: String!
 }
 
@@ -542,10 +542,10 @@ enum Account_myuserprofileOrderByInput {
 }
 
 type Account_myuserprofilePreviousValues {
-  company: String
+  company: String!
   id: Int!
-  image: String
-  job_boolean: String
+  image: String!
+  job_boolean: String!
   profile_name: String!
 }
 
