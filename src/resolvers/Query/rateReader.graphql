@@ -1,0 +1,4 @@
+type Query {
+  getReaders: [User]!
+  getShowers: [User]!
+}

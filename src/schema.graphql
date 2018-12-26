@@ -2,6 +2,8 @@ type Mutation {
   signup(email: String!, password: String!, nickname: String!): authResponse
   login(email: String!, password: String!): authResponse
   profileUpdate(company: String, image: String, job_boolean: String, profile_name: String): User!
+  addRateReader(userId: Int!): User!
+  removeRateReader(userId: Int!): User!
 }
 
 type authResponse {
@@ -11,6 +13,8 @@ type authResponse {
 
 type Query {
   getLiners: [Liners!]!
+  getReaders: [User]!
+  getShowers: [User]!
   me: User!
 }
 

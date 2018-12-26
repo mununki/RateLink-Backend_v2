@@ -1,0 +1,4 @@
+type Mutation {
+  addRateReader(userId: Int!): User!
+  removeRateReader(userId: Int!): User!
+}
