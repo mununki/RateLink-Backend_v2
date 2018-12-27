@@ -21,5 +21,6 @@
 - [x] JWT authentication
 - [x] Profile update
 - [x] Rate reader & shower list & update
-- [ ] Rate list (w/ showers, date ranges)
-- [ ] Rate search
+- [x] Rate list (w/ showers, date ranges)
+- [x] Rate search
+- [ ] Query each field for autocomplete in front-end

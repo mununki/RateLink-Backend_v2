@@ -5,17 +5,23 @@ import { User } from "./User";
 import { profile } from "./Mutaion/profile";
 import { queryRateReader } from "./Query/rateReader";
 import { mutationRateReader } from "./Mutaion/rateReader";
+import { rates } from "./Query/rates";
+import { Rate } from "./Rate";
+import { Client } from "./Client";
 
 export const resolvers = {
   Query: {
     ...user,
     ...liners,
-    ...queryRateReader
+    ...queryRateReader,
+    ...rates
   },
   Mutation: {
     ...auth,
     ...profile,
     ...mutationRateReader
   },
-  User
+  User,
+  Rate,
+  Client
 };

@@ -1,28 +1,11 @@
-type Mutation {
-  signup(email: String!, password: String!, nickname: String!): authResponse
-  login(email: String!, password: String!): authResponse
-  profileUpdate(company: String, image: String, job_boolean: String, profile_name: String): User!
-  addRateReader(userId: Int!): User!
-  removeRateReader(userId: Int!): User!
-}
-
-type authResponse {
-  token: String!
-  user: User!
-}
-
 type Query {
-  getLiners: [Liners!]!
-  getReaders: [User]!
-  getShowers: [User]!
-  getRates(before: String, last: Int, after: String, first: Int, queryParams: String): Rate_rateConnection
-  me: User!
-}
-
-type Liners {
-  id: Int!
-  label: String!
-  name: String!
+  getRates(
+    before: String
+    last: Int
+    after: String
+    first: Int
+    queryParams: String
+  ): Rate_rateConnection
 }
 
 type Rate_rateConnection {
@@ -89,21 +72,4 @@ type Location {
 type CNTRType {
   id: Int!
   name: String!
-}
-
-type User {
-  id: Int!
-  email: String!
-  nickname: String!
-  password: String!
-  profile: UserProfile!
-}
-
-type UserProfile {
-  id: Int!
-  owner: User!
-  profile_name: String!
-  company: String
-  job_boolean: String
-  image: String
 }
