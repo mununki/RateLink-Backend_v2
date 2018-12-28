@@ -1,5 +1,4 @@
 import { user } from "./Query/user";
-import { liners } from "./Query/liners";
 import { auth } from "./Mutaion/auth";
 import { User } from "./User";
 import { profile } from "./Mutaion/profile";
@@ -12,7 +11,6 @@ import { Client } from "./Client";
 export const resolvers = {
   Query: {
     ...user,
-    ...liners,
     ...queryRateReader,
     ...rates
   },

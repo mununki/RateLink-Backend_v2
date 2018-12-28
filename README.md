@@ -23,4 +23,5 @@
 - [x] Rate reader & shower list & update
 - [x] Rate list (w/ showers, date ranges)
 - [x] Rate search
-- [ ] Query each field for autocomplete in front-end
+- [x] Query each field for autocomplete in front-end
+- [ ] Rate Mutation

@@ -6,6 +6,11 @@ type Query {
     first: Int
     queryParams: String
   ): Rate_rateConnection
+  getInputpersons(search: String): [User]
+  getClients(search: String): [Client]
+  getLiners(search: String, showOurs: Boolean): [Liner]
+  getLocations(search: String, showOurs: Boolean, polOrPod: String): [Location]
+  getCNTRtypes(search: String, showOurs: Boolean): [CNTRtype]
 }
 
 type Rate_rateConnection {
@@ -32,7 +37,7 @@ type Rate {
   liner: Liner!
   pol: Location!
   pod: Location!
-  cntrtype: CNTRType!
+  cntrtype: CNTRtype!
   buying20: Int
   buying40: Int
   buying4H: Int
@@ -69,7 +74,7 @@ type Location {
   label: String!
 }
 
-type CNTRType {
+type CNTRtype {
   id: Int!
   name: String!
 }
