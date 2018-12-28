@@ -24,4 +24,5 @@
 - [x] Rate list (w/ showers, date ranges)
 - [x] Rate search
 - [x] Query each field for autocomplete in front-end
-- [ ] Rate Mutation
+- [x] Rate Mutation (create, update)
+- [ ] Query for charts

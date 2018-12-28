@@ -1,4 +1,4 @@
-import { Context } from "../../types/resolver";
+import { Context, ContextWithUser } from "../../types/resolver";
 import {
   Rate_rateConnection,
   Account_myuser,
@@ -17,7 +17,7 @@ export const rates = {
     async (
       root: any,
       args: any,
-      ctx: Context
+      ctx: ContextWithUser
     ): Promise<Rate_rateConnection> => {
       let inputQueryParams = {
         selectedIp: [],
@@ -117,9 +117,11 @@ export const rates = {
     }
   ),
   getInputpersons: privateResolver(
-    async (root: any, args: any, ctx: Context): Promise<Account_myuser[]> => {
-      if (!ctx.user) throw new Error("Log in required");
-
+    async (
+      root: any,
+      args: any,
+      ctx: ContextWithUser
+    ): Promise<Account_myuser[]> => {
       const showers = await ctx.prisma.account_myusers({
         where: {
           account_ratereaders_showers_some: { reader: { id: ctx.user.id } },
@@ -149,7 +151,7 @@ export const rates = {
     async (
       root: any,
       args: any,
-      ctx: Context
+      ctx: ContextWithUser
     ): Promise<Countrycity_liner[]> => {
       if (args.showOurs) {
         const selectedIp = await getShowers(ctx);
@@ -206,7 +208,7 @@ export const rates = {
     async (
       root: any,
       args: any,
-      ctx: Context
+      ctx: ContextWithUser
     ): Promise<Countrycity_location[]> => {
       if (args.showOurs) {
         const selectedIp = await getShowers(ctx);
@@ -267,7 +269,11 @@ export const rates = {
     }
   ),
   getCNTRtypes: privateResolver(
-    async (root: any, args: any, ctx: Context): Promise<Rate_cntrtype[]> => {
+    async (
+      root: any,
+      args: any,
+      ctx: ContextWithUser
+    ): Promise<Rate_cntrtype[]> => {
       const selectedIp = await getShowers(ctx);
 
       if (args.showOurs) {

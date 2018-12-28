@@ -4,6 +4,7 @@ type Mutation {
   profileUpdate(company: String, image: String, job_boolean: String, profile_name: String): User!
   addRateReader(userId: Int!): User!
   removeRateReader(userId: Int!): User!
+  setRate(rateId: Int, newRate: String, handler: String!): Rate
 }
 
 type authResponse {
