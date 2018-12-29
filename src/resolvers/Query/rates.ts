@@ -12,7 +12,7 @@ import { QueryParams } from "../../types/resolver";
 import getShowers from "../../util/getShowers";
 import privateResolver from "../../util/privateResolver";
 
-export const rates = {
+export const ratesQuery = {
   getRates: privateResolver(
     async (
       root: any,

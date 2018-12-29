@@ -1,7 +1,7 @@
 import { Context } from "../../types/resolver";
 import { Account_myuser } from "../../../generated/prisma-client";
 
-export const mutationRateReader = {
+export const rateReaderMutation = {
   addRateReader: async (
     root: any,
     args: any,
