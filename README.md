@@ -25,4 +25,4 @@
 - [x] Rate search
 - [x] Query each field for autocomplete in front-end
 - [x] Rate Mutation (create, update)
-- [ ] Query for charts
+- [x] Query for charts

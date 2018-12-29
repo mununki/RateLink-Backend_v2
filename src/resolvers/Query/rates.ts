@@ -158,21 +158,10 @@ export const rates = {
 
         const liners = await ctx.prisma.countrycity_liners({
           where: {
+            rate_rates_some: { inputperson: { id_in: selectedIp } },
             OR: [
-              {
-                rate_rates_some: { inputperson: { id_in: selectedIp } },
-                OR: [
-                  { name_starts_with: args.search.toUpperCase() },
-                  { label_starts_with: args.search.toUpperCase() }
-                ]
-              },
-              {
-                rate_rates_some: { inputperson: { id_in: selectedIp } },
-                OR: [
-                  { name_starts_with: args.search.toLowerCase() },
-                  { label_starts_with: args.search.toLowerCase() }
-                ]
-              }
+              { name_starts_with: args.search.toUpperCase() },
+              { label_starts_with: args.search.toUpperCase() }
             ]
           },
           orderBy: "label_ASC"
@@ -183,18 +172,8 @@ export const rates = {
         const liners = await ctx.prisma.countrycity_liners({
           where: {
             OR: [
-              {
-                OR: [
-                  { name_starts_with: args.search.toUpperCase() },
-                  { label_starts_with: args.search.toUpperCase() }
-                ]
-              },
-              {
-                OR: [
-                  { name_starts_with: args.search.toLowerCase() },
-                  { label_starts_with: args.search.toLowerCase() }
-                ]
-              }
+              { name_starts_with: args.search.toUpperCase() },
+              { label_starts_with: args.search.toUpperCase() }
             ]
           },
           orderBy: "label_ASC"
@@ -217,16 +196,8 @@ export const rates = {
           // query POLs
           const locations = await ctx.prisma.countrycity_locations({
             where: {
-              OR: [
-                {
-                  rate_rates_pols_some: { inputperson: { id_in: selectedIp } },
-                  name_starts_with: args.search.toUpperCase()
-                },
-                {
-                  rate_rates_pols_some: { inputperson: { id_in: selectedIp } },
-                  name_starts_with: args.search.toLowerCase()
-                }
-              ]
+              rate_rates_pols_some: { inputperson: { id_in: selectedIp } },
+              name_starts_with: args.search.toUpperCase()
             },
             orderBy: "name_ASC"
           });
@@ -236,16 +207,8 @@ export const rates = {
           // query PODs
           const locations = await ctx.prisma.countrycity_locations({
             where: {
-              OR: [
-                {
-                  rate_rates_pods_some: { inputperson: { id_in: selectedIp } },
-                  name_starts_with: args.search.toUpperCase()
-                },
-                {
-                  rate_rates_pods_some: { inputperson: { id_in: selectedIp } },
-                  name_starts_with: args.search.toLowerCase()
-                }
-              ]
+              rate_rates_pods_some: { inputperson: { id_in: selectedIp } },
+              name_starts_with: args.search.toUpperCase()
             },
             orderBy: "name_ASC"
           });
@@ -256,10 +219,7 @@ export const rates = {
         // query all locations
         const locations = await ctx.prisma.countrycity_locations({
           where: {
-            OR: [
-              { name_starts_with: args.search.toUpperCase() },
-              { name_starts_with: args.search.toLowerCase() }
-            ]
+            name_starts_with: args.search.toUpperCase()
           },
           orderBy: "name_ASC"
         });
@@ -279,30 +239,15 @@ export const rates = {
       if (args.showOurs) {
         const types = await ctx.prisma.rate_cntrtypes({
           where: {
-            OR: [
-              {
-                rate_rates_some: { inputperson: { id_in: selectedIp } },
-                name_starts_with: args.search.toUpperCase()
-              },
-              {
-                rate_rates_some: { inputperson: { id_in: selectedIp } },
-                name_starts_with: args.search.toLowerCase()
-              }
-            ]
+            rate_rates_some: { inputperson: { id_in: selectedIp } },
+            name_starts_with: args.search.toUpperCase()
           }
         });
         return types;
       } else {
         const types = await ctx.prisma.rate_cntrtypes({
           where: {
-            OR: [
-              {
-                name_starts_with: args.search.toUpperCase()
-              },
-              {
-                name_starts_with: args.search.toLowerCase()
-              }
-            ]
+            name_starts_with: args.search.toUpperCase()
           }
         });
         return types;
