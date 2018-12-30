@@ -96,11 +96,12 @@ export const ratesMutation = {
 
       let rates: Rate_rate[] = [];
       if (args.handler === "add") {
-        return saveMultipleRates(inputNewRate, ctx);
+        return saveMultipleRates(inputNewRate, ctx); // add rates
       } else if (args.handler === "modify") {
         if (!args.rateId) throw new Error("rateId is missing!");
 
         const rate = await ctx.prisma.updateRate_rate({
+          // modify rate
           data: {
             inputperson: { connect: { id: ctx.user.id } },
             account: { connect: { id: inputNewRate.selectedCt[0].value } },
