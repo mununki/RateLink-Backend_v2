@@ -1,9 +1,15 @@
 type Mutation {
-  signup(email: String!, password: String!, nickname: String!): authResponse
-  login(email: String!, password: String!): authResponse
+  signup(email: String!, password: String!, nickname: String!): LoginResponse
+  login(email: String!, password: String!): LoginResponse
 }
 
-type authResponse {
-  token: String!
-  user: User!
+type LoginResponse {
+  ok: Boolean
+  data: TokenResponse
+  error: String
+}
+
+type TokenResponse {
+  token: String
+  user: User
 }

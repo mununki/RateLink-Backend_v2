@@ -1,13 +1,27 @@
-import { Context } from "../../types/resolver";
+import { Context, LoginResponse } from "../../types/resolver";
 import { comparePW, generatePW } from "../../util/password";
 import createJWT from "../../util/createJWT";
-import { Account_myuser } from "../../../generated/prisma-client";
 
 export const auth = {
-  signup: async (root: any, args: any, ctx: Context) => {
+  signup: async (
+    root: any,
+    args: any,
+    ctx: Context
+  ): Promise<LoginResponse> => {
+    if (args.email === "" || args.password === "" || args.nickname === "")
+      return {
+        ok: false,
+        data: { token: null, user: null },
+        error: "Required input missing!"
+      };
     // check if user is already existing
     const existingUser = await ctx.prisma.account_myuser({ email: args.email });
-    if (existingUser) throw new Error("Already Signed up!");
+    if (existingUser)
+      return {
+        ok: false,
+        data: { token: null, user: null },
+        error: "Already signed up"
+      };
 
     const hashedPassword = await generatePW(args.password);
     if (hashedPassword) {
@@ -30,33 +44,60 @@ export const auth = {
       const token = await createJWT(user.id);
 
       return {
-        token,
-        user
+        ok: true,
+        data: {
+          token,
+          user
+        },
+        error: null
+      };
+    } else {
+      return {
+        ok: false,
+        data: {
+          token: null,
+          user: null
+        },
+        error: "Password not hashed!"
       };
     }
   },
-  login: async (
-    root: any,
-    args: any,
-    ctx: Context
-  ): Promise<{ token: string; user: Account_myuser }> => {
+  login: async (root: any, args: any, ctx: Context): Promise<LoginResponse> => {
     const user = await ctx.prisma.account_myuser({ email: args.email });
 
     if (!user) {
-      throw new Error(`No such user found for email: ${args.email}`);
+      return {
+        ok: false,
+        data: {
+          token: null,
+          user: null
+        },
+        error: `No such user found for email: ${args.email}`
+      };
     }
 
     const valid = await comparePW(user.password, args.password);
 
     if (!valid) {
-      throw new Error("Invalid password");
+      return {
+        ok: false,
+        data: {
+          token: null,
+          user: null
+        },
+        error: "Invalid Password"
+      };
     }
 
     const token = await createJWT(user.id);
 
     return {
-      token,
-      user
+      ok: true,
+      data: {
+        token,
+        user
+      },
+      error: null
     };
   }
 };
