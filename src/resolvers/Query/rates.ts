@@ -1,4 +1,10 @@
-import { Context, ContextWithUser } from "../../types/resolver";
+import {
+  Context,
+  ContextWithUser,
+  RateResponse,
+  QueryParams,
+  InputQueryParams
+} from "../../types/resolver";
 import {
   Rate_rateConnection,
   Account_myuser,
@@ -8,7 +14,6 @@ import {
   Rate_cntrtype
 } from "../../../generated/prisma-client";
 import moment from "moment";
-import { QueryParams } from "../../types/resolver";
 import getShowers from "../../util/getShowers";
 import privateResolver from "../../util/privateResolver";
 
@@ -18,8 +23,8 @@ export const ratesQuery = {
       root: any,
       args: any,
       ctx: ContextWithUser
-    ): Promise<Rate_rateConnection> => {
-      let inputQueryParams = {
+    ): Promise<RateResponse> => {
+      let inputQueryParams: InputQueryParams = {
         selectedIp: [],
         selectedCt: [],
         selectedLn: [],
@@ -33,7 +38,7 @@ export const ratesQuery = {
       try {
         inputQueryParams = JSON.parse(args.queryParams);
       } catch (err) {
-        throw new Error("queryParams is invalid");
+        return { ok: false, data: null, error: "queryParams is invalid" };
       }
 
       const selectedIp = await getShowers(ctx);
@@ -43,14 +48,17 @@ export const ratesQuery = {
         effectiveDate_gte: moment()
           .startOf("month")
           .format(),
-        effectiveDate_lte: moment().format()
+        effectiveDate_lte: moment().format(),
+        deleted: false
       };
 
       if (
         inputQueryParams.selectedIp &&
         inputQueryParams.selectedIp.length > 0
       ) {
-        queryParams.inputperson.id_in = inputQueryParams.selectedIp;
+        queryParams.inputperson.id_in = inputQueryParams.selectedIp.map(
+          ip => ip.value
+        );
       }
       if (
         inputQueryParams.selectedCt &&
@@ -58,7 +66,9 @@ export const ratesQuery = {
       ) {
         queryParams = {
           ...queryParams,
-          account: { id_in: inputQueryParams.selectedCt }
+          account: {
+            id_in: inputQueryParams.selectedCt.map(client => client.value)
+          }
         };
       }
       if (
@@ -67,7 +77,9 @@ export const ratesQuery = {
       ) {
         queryParams = {
           ...queryParams,
-          liner: { id_in: inputQueryParams.selectedLn }
+          liner: {
+            id_in: inputQueryParams.selectedLn.map(liner => liner.value)
+          }
         };
       }
       if (
@@ -76,7 +88,7 @@ export const ratesQuery = {
       ) {
         queryParams = {
           ...queryParams,
-          pol: { id_in: inputQueryParams.selectedPl }
+          pol: { id_in: inputQueryParams.selectedPl.map(pol => pol.value) }
         };
       }
       if (
@@ -85,7 +97,7 @@ export const ratesQuery = {
       ) {
         queryParams = {
           ...queryParams,
-          pod: { id_in: inputQueryParams.selectedPd }
+          pod: { id_in: inputQueryParams.selectedPd.map(pod => pod.value) }
         };
       }
       if (
@@ -94,7 +106,7 @@ export const ratesQuery = {
       ) {
         queryParams = {
           ...queryParams,
-          type: { id_in: inputQueryParams.selectedTy }
+          type: { id_in: inputQueryParams.selectedTy.map(type => type.value) }
         };
       }
       if (inputQueryParams.initialSF) {
@@ -104,16 +116,21 @@ export const ratesQuery = {
         queryParams.effectiveDate_lte = inputQueryParams.initialST;
       }
 
-      const rates = await ctx.prisma.rate_ratesConnection({
-        where: queryParams,
-        first: args.first,
-        last: args.last,
-        orderBy: "recordedDate_DESC",
-        before: args.before,
-        after: args.after
-      });
+      let rates: Rate_rateConnection;
+      try {
+        rates = await ctx.prisma.rate_ratesConnection({
+          where: queryParams,
+          first: args.first,
+          last: args.last,
+          orderBy: "id_DESC",
+          before: args.before,
+          after: args.after
+        });
+      } catch (err) {
+        return { ok: false, data: null, error: err };
+      }
 
-      return rates;
+      return { ok: true, data: rates, error: null };
     }
   ),
   getInputpersons: privateResolver(
@@ -129,6 +146,7 @@ export const ratesQuery = {
           account_myuserprofiles_some: { profile_name_starts_with: args.search }
         }
       });
+      showers.push(ctx.user);
       return showers;
     }
   ),
@@ -139,7 +157,7 @@ export const ratesQuery = {
       const clients = await ctx.prisma.rate_clients({
         where: {
           salesman: { id_in: selectedIp },
-          name_starts_with: args.search
+          name_starts_with: args.search.toUpperCase()
         },
         orderBy: "name_ASC"
       });

@@ -5,12 +5,18 @@ type Query {
     after: String
     first: Int
     queryParams: String
-  ): Rate_rateConnection
+  ): RateResponse
   getInputpersons(search: String): [User]
   getClients(search: String): [Client]
   getLiners(search: String, showOurs: Boolean): [Liner]
   getLocations(search: String, showOurs: Boolean, polOrPod: String): [Location]
   getCNTRtypes(search: String, showOurs: Boolean): [CNTRtype]
+}
+
+type RateResponse {
+  ok: Boolean
+  data: Rate_rateConnection
+  error: String
 }
 
 type Rate_rateConnection {
