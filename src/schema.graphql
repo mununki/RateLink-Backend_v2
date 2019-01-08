@@ -1,27 +1,41 @@
 type Mutation {
-  signup(email: String!, password: String!, nickname: String!): authResponse
-  login(email: String!, password: String!): authResponse
-  profileUpdate(company: String, image: String, job_boolean: String, profile_name: String): User!
+  signup(email: String!, password: String!, nickname: String!): LoginResponse
+  login(email: String!, password: String!): LoginResponse
+  updateProfile(company: String, image: String, job_boolean: String, profile_name: String): UserResponse!
   addRateReader(userId: Int!): User!
   removeRateReader(userId: Int!): User!
   setRate(rateId: Int, newRate: String, handler: String!): [Rate]
 }
 
-type authResponse {
-  token: String!
-  user: User!
+type LoginResponse {
+  ok: Boolean
+  data: TokenResponse
+  error: String
+}
+
+type TokenResponse {
+  token: String
+  user: User
 }
 
 type Query {
   getReaders: [User]!
   getShowers: [User]!
-  getRates(before: String, last: Int, after: String, first: Int, queryParams: String): Rate_rateConnection
+  getRates(before: String, last: Int, after: String, first: Int, queryParams: String): RateResponse
   getInputpersons(search: String): [User]
   getClients(search: String): [Client]
   getLiners(search: String, showOurs: Boolean): [Liner]
   getLocations(search: String, showOurs: Boolean, polOrPod: String): [Location]
   getCNTRtypes(search: String, showOurs: Boolean): [CNTRtype]
-  me: User!
+  me: UserResponse!
+  findUsers(email: String, nickname: String, profile_name: String, company: String): [User]
+  checkIfExist(email: String!): Boolean!
+}
+
+type RateResponse {
+  ok: Boolean
+  data: Rate_rateConnection
+  error: String
 }
 
 type Rate_rateConnection {
@@ -105,4 +119,10 @@ type UserProfile {
   company: String
   job_boolean: String
   image: String
+}
+
+type UserResponse {
+  ok: Boolean
+  data: User
+  error: String
 }

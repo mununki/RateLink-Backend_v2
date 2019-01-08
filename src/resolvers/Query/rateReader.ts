@@ -11,7 +11,8 @@ export const rateReaderQuery = {
     const readers = await ctx.prisma.account_myusers({
       where: {
         account_ratereaders_readers_some: { shower: { id: ctx.user.id } }
-      }
+      },
+      orderBy: "nickname_ASC"
     });
     return readers;
   },
@@ -24,7 +25,8 @@ export const rateReaderQuery = {
     const showers = await ctx.prisma.account_myusers({
       where: {
         account_ratereaders_showers_some: { reader: { id: ctx.user.id } }
-      }
+      },
+      orderBy: "nickname_ASC"
     });
     return showers;
   }
