@@ -1,5 +1,4 @@
-import { Context } from "../../types/resolver";
-import { Account_myuser } from "../../../generated/prisma-client";
+import { Context, UserResponse } from "../../types/resolver";
 
 const checkVaildJob_boolean = (inputJob: string): boolean => {
   const ENUM = ["1", "2", "3"]; // 1: 선사, 2: 포워더, 3: 기타
@@ -7,16 +6,16 @@ const checkVaildJob_boolean = (inputJob: string): boolean => {
 };
 
 export const profile = {
-  profileUpdate: async (
+  updateProfile: async (
     root: any,
     args: any,
     ctx: Context
-  ): Promise<Account_myuser> => {
+  ): Promise<UserResponse> => {
     const { company, image, job_boolean, profile_name } = args;
     if (!checkVaildJob_boolean(job_boolean))
-      throw new Error("Job selection is invalid");
+      return { ok: false, data: null, error: "Invalid job selected" };
 
-    if (!ctx.user) throw new Error("Log in required");
+    if (!ctx.user) return { ok: false, data: null, error: "Log in required!" };
 
     const profile = await ctx.prisma.account_myuserprofilesConnection({
       where: { owner: { id: ctx.user.id } }
@@ -27,6 +26,6 @@ export const profile = {
       data: { company, image, job_boolean, profile_name }
     });
 
-    return ctx.user;
+    return { ok: true, data: ctx.user, error: null };
   }
 };

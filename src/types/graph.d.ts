@@ -1,16 +1,18 @@
-export const typeDefs = ["type Mutation {\n  signup(email: String!, password: String!, nickname: String!): authResponse\n  login(email: String!, password: String!): authResponse\n  profileUpdate(company: String, image: String, job_boolean: String, profile_name: String): User!\n  addRateReader(userId: Int!): User!\n  removeRateReader(userId: Int!): User!\n  setRate(rateId: Int, newRate: String, handler: String!): [Rate]\n}\n\ntype authResponse {\n  token: String!\n  user: User!\n}\n\ntype Query {\n  getReaders: [User]!\n  getShowers: [User]!\n  getRates(before: String, last: Int, after: String, first: Int, queryParams: String): Rate_rateConnection\n  getInputpersons(search: String): [User]\n  getClients(search: String): [Client]\n  getLiners(search: String, showOurs: Boolean): [Liner]\n  getLocations(search: String, showOurs: Boolean, polOrPod: String): [Location]\n  getCNTRtypes(search: String, showOurs: Boolean): [CNTRtype]\n  me: User!\n}\n\ntype Rate_rateConnection {\n  pageInfo: PageInfo\n  edges: [Rate_rateEdge]\n}\n\ntype PageInfo {\n  hasNextPage: Boolean\n  hasPreviousPage: Boolean\n  startCursor: String\n  endCursor: String\n}\n\ntype Rate_rateEdge {\n  node: Rate\n  cursor: String\n}\n\ntype Rate {\n  id: Int!\n  inputperson: User!\n  client: Client!\n  liner: Liner!\n  pol: Location!\n  pod: Location!\n  cntrtype: CNTRtype!\n  buying20: Int\n  buying40: Int\n  buying4H: Int\n  selling20: Int\n  selling40: Int\n  selling4H: Int\n  loadingFT: Int\n  dischargingFT: Int\n  offeredDate: String\n  effectiveDate: String\n  recordedDate: String\n  remark: String\n  deleted: Boolean\n}\n\ntype Client {\n  id: Int!\n  name: String!\n  salesman: User!\n  remarks: String!\n  recordedDate: String\n}\n\ntype Liner {\n  id: Int!\n  name: String!\n  label: String!\n}\n\ntype Location {\n  id: Int!\n  name: String!\n  country: String!\n  label: String!\n}\n\ntype CNTRtype {\n  id: Int!\n  name: String!\n}\n\ntype User {\n  id: Int!\n  email: String!\n  nickname: String!\n  password: String!\n  profile: UserProfile!\n}\n\ntype UserProfile {\n  id: Int!\n  owner: User!\n  profile_name: String!\n  company: String\n  job_boolean: String\n  image: String\n}\n"];
+export const typeDefs = ["type Mutation {\n  signup(email: String!, password: String!, nickname: String!): LoginResponse\n  login(email: String!, password: String!): LoginResponse\n  updateProfile(company: String, image: String, job_boolean: String, profile_name: String): UserResponse!\n  addRateReader(userId: Int!): User!\n  removeRateReader(userId: Int!): User!\n  setRate(rateId: Int, newRate: String, handler: String!): [Rate]\n}\n\ntype LoginResponse {\n  ok: Boolean\n  data: TokenResponse\n  error: String\n}\n\ntype TokenResponse {\n  token: String\n  user: User\n}\n\ntype Query {\n  getReaders: [User]!\n  getShowers: [User]!\n  getRates(before: String, last: Int, after: String, first: Int, queryParams: String): RateResponse\n  getInputpersons(search: String): [User]\n  getClients(search: String): [Client]\n  getLiners(search: String, showOurs: Boolean): [Liner]\n  getLocations(search: String, showOurs: Boolean, polOrPod: String): [Location]\n  getCNTRtypes(search: String, showOurs: Boolean): [CNTRtype]\n  me: UserResponse!\n  findUsers(email: String, nickname: String, profile_name: String, company: String): [User]\n  checkIfExist(email: String!): Boolean!\n}\n\ntype RateResponse {\n  ok: Boolean\n  data: Rate_rateConnection\n  error: String\n}\n\ntype Rate_rateConnection {\n  pageInfo: PageInfo\n  edges: [Rate_rateEdge]\n}\n\ntype PageInfo {\n  hasNextPage: Boolean\n  hasPreviousPage: Boolean\n  startCursor: String\n  endCursor: String\n}\n\ntype Rate_rateEdge {\n  node: Rate\n  cursor: String\n}\n\ntype Rate {\n  id: Int!\n  inputperson: User!\n  client: Client!\n  liner: Liner!\n  pol: Location!\n  pod: Location!\n  cntrtype: CNTRtype!\n  buying20: Int\n  buying40: Int\n  buying4H: Int\n  selling20: Int\n  selling40: Int\n  selling4H: Int\n  loadingFT: Int\n  dischargingFT: Int\n  offeredDate: String\n  effectiveDate: String\n  recordedDate: String\n  remark: String\n  deleted: Boolean\n}\n\ntype Client {\n  id: Int!\n  name: String!\n  salesman: User!\n  remarks: String!\n  recordedDate: String\n}\n\ntype Liner {\n  id: Int!\n  name: String!\n  label: String!\n}\n\ntype Location {\n  id: Int!\n  name: String!\n  country: String!\n  label: String!\n}\n\ntype CNTRtype {\n  id: Int!\n  name: String!\n}\n\ntype User {\n  id: Int!\n  email: String!\n  nickname: String!\n  password: String!\n  profile: UserProfile!\n}\n\ntype UserProfile {\n  id: Int!\n  owner: User!\n  profile_name: String!\n  company: String\n  job_boolean: String\n  image: String\n}\n\ntype UserResponse {\n  ok: Boolean\n  data: User\n  error: String\n}\n"];
 /* tslint:disable */
 
 export interface Query {
   getReaders: Array<User>;
   getShowers: Array<User>;
-  getRates: Rate_rateConnection | null;
+  getRates: RateResponse | null;
   getInputpersons: Array<User> | null;
   getClients: Array<Client> | null;
   getLiners: Array<Liner> | null;
   getLocations: Array<Location> | null;
   getCNTRtypes: Array<CNTRtype> | null;
-  me: User;
+  me: UserResponse;
+  findUsers: Array<User> | null;
+  checkIfExist: boolean;
 }
 
 export interface GetRatesQueryArgs {
@@ -45,6 +47,17 @@ export interface GetCntRtypesQueryArgs {
   showOurs: boolean | null;
 }
 
+export interface FindUsersQueryArgs {
+  email: string | null;
+  nickname: string | null;
+  profile_name: string | null;
+  company: string | null;
+}
+
+export interface CheckIfExistQueryArgs {
+  email: string;
+}
+
 export interface User {
   id: number;
   email: string;
@@ -60,6 +73,12 @@ export interface UserProfile {
   company: string | null;
   job_boolean: string | null;
   image: string | null;
+}
+
+export interface RateResponse {
+  ok: boolean | null;
+  data: Rate_rateConnection | null;
+  error: string | null;
 }
 
 export interface Rate_rateConnection {
@@ -128,10 +147,16 @@ export interface CNTRtype {
   name: string;
 }
 
+export interface UserResponse {
+  ok: boolean | null;
+  data: User | null;
+  error: string | null;
+}
+
 export interface Mutation {
-  signup: authResponse | null;
-  login: authResponse | null;
-  profileUpdate: User;
+  signup: LoginResponse | null;
+  login: LoginResponse | null;
+  updateProfile: UserResponse;
   addRateReader: User;
   removeRateReader: User;
   setRate: Array<Rate> | null;
@@ -148,7 +173,7 @@ export interface LoginMutationArgs {
   password: string;
 }
 
-export interface ProfileUpdateMutationArgs {
+export interface UpdateProfileMutationArgs {
   company: string | null;
   image: string | null;
   job_boolean: string | null;
@@ -169,7 +194,13 @@ export interface SetRateMutationArgs {
   handler: string;
 }
 
-export interface authResponse {
-  token: string;
-  user: User;
+export interface LoginResponse {
+  ok: boolean | null;
+  data: TokenResponse | null;
+  error: string | null;
+}
+
+export interface TokenResponse {
+  token: string | null;
+  user: User | null;
 }
