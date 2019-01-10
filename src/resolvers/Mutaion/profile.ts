@@ -1,7 +1,7 @@
 import { Context, UserResponse } from "../../types/resolver";
 
 const checkVaildJob_boolean = (inputJob: string): boolean => {
-  const ENUM = ["1", "2", "3"]; // 1: 선사, 2: 포워더, 3: 기타
+  const ENUM = ["0", "1", "2", "3"]; // 1: 선사, 2: 포워더, 3: 기타
   return ENUM.filter(job => job === inputJob).length === 1;
 };
 
@@ -11,11 +11,13 @@ export const profile = {
     args: any,
     ctx: Context
   ): Promise<UserResponse> => {
-    const { company, image, job_boolean, profile_name } = args;
+    if (!ctx.user) return { ok: false, data: null, error: "Log in required!" };
+
+    const { company, image, profile_name } = args;
+    let { job_boolean } = args;
+
     if (!checkVaildJob_boolean(job_boolean))
       return { ok: false, data: null, error: "Invalid job selected" };
-
-    if (!ctx.user) return { ok: false, data: null, error: "Log in required!" };
 
     const profile = await ctx.prisma.account_myuserprofilesConnection({
       where: { owner: { id: ctx.user.id } }
