@@ -35,9 +35,8 @@ export const deletePrevProfileImage = url => {
   return new Promise((resolve, reject) => {
     if (!url) throw new Error("Filename has to be received");
 
-    console.log(url);
     const filename = url.slice(1);
-    console.log(filename);
+
     s3.deleteObject(
       {
         Key: filename

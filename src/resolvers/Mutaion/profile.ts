@@ -2,6 +2,8 @@ import { Context, UserResponse, ContextWithUser } from "../../types/resolver";
 import privateResolver from "../../util/privateResolver";
 import { uploadToS3, deletePrevProfileImage } from "../../util/handleS3";
 
+const allowedMIMEtypes = ["image/jpeg", "image/png", "image/git"];
+
 const checkVaildJob_boolean = (inputJob: string): boolean => {
   const ENUM = ["0", "1", "2", "3"]; // 1: 선사, 2: 포워더, 3: 기타
   return ENUM.filter(job => job === inputJob).length === 1;
@@ -38,11 +40,21 @@ export const profile = {
       args: any,
       ctx: ContextWithUser
     ): Promise<UserResponse> => {
-      const { stream, filename } = await args.file;
-
+      const { stream, filename, mimetype } = await args.file;
+      console.log(mimetype);
       const reImageFile = /^([a-zA-Z0-9\s_\\.\-\(\):])+(.jpg|.jpeg|.gif|.png)$/;
-      if (!reImageFile.test(filename)) {
-        await stream.read();
+      if (
+        !reImageFile.test(filename) ||
+        allowedMIMEtypes.indexOf(mimetype) < 0
+      ) {
+        await new Promise((resolve, reject) => {
+          stream.on("readable", () => {
+            stream.read();
+          });
+          stream.on("end", () => {
+            resolve(true);
+          });
+        });
         return { ok: false, data: null, error: "Image file only" };
       }
 
