@@ -2,8 +2,6 @@ import { ContextWithUser, newRateSelectedField } from "../../types/resolver";
 import privateResolver from "../../util/privateResolver";
 import { Rate_rate, Rate_ratePromise } from "../../../generated/prisma-client";
 import moment = require("moment");
-import { resolve } from "url";
-import { RateResponse } from "../../types/graph";
 
 // newRate: {
 //   selectedIp: [{ value: this.props.USER_ID }],
@@ -118,6 +116,13 @@ export const ratesMutation = {
         return saveMultipleRates(inputNewRate, ctx); // add rates
       } else if (args.handler === "modify") {
         if (!args.rateId) throw new Error("rateId is missing!");
+
+        const prevInputperson = await ctx.prisma.account_myusers({
+          where: { rate_rates_some: { id: args.rateId } }
+        });
+
+        if (prevInputperson[0].id !== ctx.user.id)
+          throw new Error("This is not your rate.");
 
         const inputNewRate = JSON.parse(args.newRate);
         const rate = await ctx.prisma.updateRate_rate({
