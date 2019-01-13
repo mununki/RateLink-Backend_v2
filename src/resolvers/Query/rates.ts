@@ -141,12 +141,25 @@ export const ratesQuery = {
     ): Promise<Account_myuser[]> => {
       const showers = await ctx.prisma.account_myusers({
         where: {
-          account_ratereaders_showers_some: { reader: { id: ctx.user.id } },
-          nickname_starts_with: args.search,
-          account_myuserprofiles_some: { profile_name_starts_with: args.search }
+          OR: [
+            {
+              account_ratereaders_showers_some: { reader: { id: ctx.user.id } },
+              account_myuserprofiles_some: {
+                profile_name_starts_with: args.search
+              }
+            },
+            {
+              account_ratereaders_showers_some: { reader: { id: ctx.user.id } },
+              account_myuserprofiles_some: {
+                profile_name_starts_with: args.search.toUpperCase()
+              }
+            }
+          ]
         }
       });
-      showers.push(ctx.user);
+      if (!args.search || args.search === "") {
+        showers.push(ctx.user);
+      }
       return showers;
     }
   ),
