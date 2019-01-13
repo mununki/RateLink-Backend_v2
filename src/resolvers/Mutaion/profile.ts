@@ -48,9 +48,7 @@ export const profile = {
         allowedMIMEtypes.indexOf(mimetype) < 0
       ) {
         await new Promise((resolve, reject) => {
-          stream.on("readable", () => {
-            stream.read();
-          });
+          stream.resume();
           stream.on("end", () => {
             resolve(true);
           });
