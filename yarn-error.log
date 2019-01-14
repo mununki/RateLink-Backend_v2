@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.12.3/libexec/bin/yarn.js add bcrypjs
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.12.3/libexec/bin/yarn.js add @types/graphql-upload -D
 
 PATH: 
-  /Users/arnold/.pyenv/shims:/Users/arnold/Library/Python/2.7/bin:/Users/arnold/.pyenv/bin:/Users/arnold/.yarn/bin:/Users/arnold/.config/yarn/global/node_modules/.bin:/Users/arnold/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Users/arnold/.pyenv/shims:/Users/arnold/.pyenv/bin:/Users/arnold/.yarn/bin:/Users/arnold/.config/yarn/global/node_modules/.bin:/Users/arnold/bin
+  /Users/arnold/.pyenv/shims:/Users/arnold/Library/Python/2.7/bin:/Users/arnold/.pyenv/bin:/Users/arnold/.yarn/bin:/Users/arnold/.config/yarn/global/node_modules/.bin:/Users/arnold/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Users/arnold/.pyenv/shims:/Users/arnold/Library/Python/2.7/bin:/Users/arnold/.pyenv/bin:/Users/arnold/.yarn/bin:/Users/arnold/.config/yarn/global/node_modules/.bin:/Users/arnold/bin
 
 Yarn version: 
   1.12.3
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/bcrypjs: Not found
+  Error: https://registry.yarnpkg.com/@types%2fgraphql-upload: Not found
       at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.12.3/libexec/lib/cli.js:65894:18)
       at Request.self.callback (/usr/local/Cellar/yarn/1.12.3/libexec/lib/cli.js:129018:22)
       at Request.emit (events.js:182:13)
@@ -29,22 +29,41 @@ Trace:
 npm manifest: 
   {
     "dependencies": {
+      "aws-sdk": "^2.386.0",
+      "cors": "^2.8.5",
       "dotenv": "^6.2.0",
+      "express": "^4.16.4",
+      "express-graphql": "^0.7.1",
+      "graphql-tools": "^4.0.3",
+      "graphql-upload": "^8.0.3",
       "graphql-yoga": "^1.16.8",
       "jsonwebtoken": "^8.4.0",
-      "prisma-client-lib": "^1.23.1"
+      "moment": "^2.23.0",
+      "prisma-client-lib": "^1.23.1",
+      "uuid": "^3.3.2"
     },
     "devDependencies": {
       "@types/aws-lambda": "^8.10.16",
+      "@types/aws-sdk": "^2.7.0",
+      "@types/cors": "^2.8.4",
       "@types/dotenv": "^6.1.0",
+      "@types/express": "^4.16.0",
+      "@types/express-graphql": "^0.6.2",
       "@types/jsonwebtoken": "^8.3.0",
+      "@types/uuid": "^3.4.4",
       "@types/ws": "^6.0.1",
       "ts-node": "^7.0.1",
       "typescript": "^3.2.2"
     },
     "scripts": {
-      "start": "ts-node src/index.ts",
-      "build": "rm -rf dist && tsc"
+      "dev": "nodemon --exec ts-node ./src/index.ts",
+      "predev": "yarn types",
+      "pretypes": "gql-merge --out-file ./src/schema.graphql ./src/**/**/*.graphql",
+      "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
+      "prebuild": "rm -rf dist",
+      "build": "tsc",
+      "postbuild": "cp ./src/*.graphql ./dist/src/",
+      "start": "node ./dist/src/index.js"
     }
   }
 
@@ -67,6 +86,13 @@ Lockfile:
     version "8.10.16"
     resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.16.tgz#143bb4f504092277036ce762e37530b022713747"
     integrity sha512-J+AWKl3EWzQLqzMQvR6t8hruzWDmhgPpBybf4ZW2yS7e0YHVmnn9FUm4B7oitpeBnJweUTR9BUyh5a7Fnyaivw==
+  
+  "@types/aws-sdk@^2.7.0":
+    version "2.7.0"
+    resolved "https://registry.yarnpkg.com/@types/aws-sdk/-/aws-sdk-2.7.0.tgz#83588b3d14ebdca1d4ce5e023387577568ce82f3"
+    integrity sha1-g1iLPRTr3KHUzl4CM4dXdWjOgvM=
+    dependencies:
+      aws-sdk "*"
   
   "@types/body-parser@*":
     version "1.17.0"
@@ -109,6 +135,14 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
     integrity sha512-KEIlhXnIutzKwRbQkGWb/I4HFqBuUykAdHgDED6xqwXJfONCjF5VoE0cXEiurh3XauygxzeDzgtXUqvLkxFzzA==
   
+  "@types/express-graphql@^0.6.2":
+    version "0.6.2"
+    resolved "https://registry.yarnpkg.com/@types/express-graphql/-/express-graphql-0.6.2.tgz#2b0608e74f2aa63fae0948f3b58abf03b613867f"
+    integrity sha512-6ZixmJn0wvdGkBg2XTyVJH5qqE1GViD1lMbCRVFzLLL0mHKmsyc0ji1A9Rv/3lGrTnP8v468+k5vTy91mlxNpQ==
+    dependencies:
+      "@types/express" "*"
+      "@types/graphql" "*"
+  
   "@types/express-serve-static-core@*":
     version "4.16.0"
     resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.16.0.tgz#fdfe777594ddc1fe8eb8eccce52e261b496e43e7"
@@ -118,7 +152,7 @@ Lockfile:
       "@types/node" "*"
       "@types/range-parser" "*"
   
-  "@types/express@*", "@types/express@^4.11.1":
+  "@types/express@*", "@types/express@^4.11.1", "@types/express@^4.16.0":
     version "4.16.0"
     resolved "https://registry.yarnpkg.com/@types/express/-/express-4.16.0.tgz#6d8bc42ccaa6f35cf29a2b7c3333cb47b5a32a19"
     integrity sha512-TtPEYumsmSTtTetAPXlJVf3kEqb6wZK0bZojpJQrnD/djV4q1oB6QQ8aKvKqwNPACoe02GNiy5zDzcYivR5Z2w==
@@ -138,6 +172,11 @@ Lockfile:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/@types/graphql-deduplicator/-/graphql-deduplicator-2.0.0.tgz#9e577b8f3feb3d067b0ca756f4a1fb356d533922"
     integrity sha512-swUwj5hWF1yFzbUXStLJrUa0ksAt11B8+SwhsAjQAX0LYJ1LLioAyuDcJ9bovWbsNzIXJYXLvljSPQw8nR728w==
+  
+  "@types/graphql@*":
+    version "14.0.4"
+    resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-14.0.4.tgz#d71a75967cd93c33eaea32b626b362ce0f2b2ae9"
+    integrity sha512-gI98ANelzzpq7lZzuYCUJg8LZDjQc7ekj7cxoWt8RezOKaVaAyK27U6AHa9LEqikP1NUhyi8blQQkHYHVRZ7Tg==
   
   "@types/graphql@^14.0.0":
     version "14.0.3"
@@ -189,6 +228,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.4.tgz#821878b81bfab971b93a265a561d54ea61f9059f"
     integrity sha512-Set5ZdrAaKI/qHdFlVMgm/GsAv/wkXhSTuZFkJ+JI7HK+wIkIlOaUXSXieIvJ0+OvGIqtREFoE+NHJtEq0gtEw==
   
+  "@types/uuid@^3.4.4":
+    version "3.4.4"
+    resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.4.4.tgz#7af69360fa65ef0decb41fd150bf4ca5c0cefdf5"
+    integrity sha512-tPIgT0GUmdJQNSHxp0X2jnpQfBSTfGxUMc/2CXBU2mnyTFVYVa2ojpoQ74w0U2yn2vw3jnC640+77lkFFpdVDw==
+    dependencies:
+      "@types/node" "*"
+  
   "@types/ws@^6.0.1":
     version "6.0.1"
     resolved "https://registry.yarnpkg.com/@types/ws/-/ws-6.0.1.tgz#ca7a3f3756aa12f62a0a62145ed14c6db25d5a28"
@@ -202,7 +248,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.5.4.tgz#b863a4191e525206819e008097ebf0fb2e3a1cdc"
     integrity sha512-sW6xN96wUak4tgc89d0tbTg7QDGYhGv5hvQIS6h4mRCd8h2btiZ80loPU8cyLwsBbA4ZeQt0FjvUhJ4rNhdsGg==
   
-  accepts@~1.3.5:
+  accepts@^1.3.5, accepts@~1.3.5:
     version "1.3.5"
     resolved "https://registry.yarnpkg.com/accepts/-/accepts-1.3.5.tgz#eb777df6011723a3b14e8a72c0805c8e86746bd2"
     integrity sha1-63d99gEXI6OxTopywIBcjoZ0a9I=
@@ -314,6 +360,21 @@ Lockfile:
       commander "^2.5.0"
       dotenv "^0.4.0"
   
+  aws-sdk@*, aws-sdk@^2.386.0:
+    version "2.386.0"
+    resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.386.0.tgz#59c94086a69c4580ffce061d81972d3c1e20d9a1"
+    integrity sha512-ZQOa2KK2f7X0vxgQPeoRIWoBgU20pSMXUDRWF8vjHUacj34CTtGE5lurp2OLYFyiucLOp9OxP0R/zosYgecxPw==
+    dependencies:
+      buffer "4.9.1"
+      events "1.1.1"
+      ieee754 "1.1.8"
+      jmespath "0.15.0"
+      querystring "0.2.0"
+      sax "1.2.1"
+      url "0.10.3"
+      uuid "3.3.2"
+      xml2js "0.4.19"
+  
   aws-sdk@^*:
     version "2.379.0"
     resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.379.0.tgz#5701f6b328c7dfddbb56d51543b0ac1418540271"
@@ -402,6 +463,13 @@ Lockfile:
       dicer "0.2.5"
       readable-stream "1.1.x"
   
+  busboy@^0.3.0:
+    version "0.3.0"
+    resolved "https://registry.yarnpkg.com/busboy/-/busboy-0.3.0.tgz#6ee3cb1c844fc1f691d8f9d824f70128b3b5e485"
+    integrity sha512-e+kzZRAbbvJPLjQz2z+zAyr78BSi9IFeBTyLwF76g78Q2zRt/RZ1NtS3MS17v2yLqYfLz69zHdC+1L4ja8PwqQ==
+    dependencies:
+      dicer "0.3.0"
+  
   bytes@3.0.0:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
@@ -444,7 +512,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/content-disposition/-/content-disposition-0.5.2.tgz#0cf68bb9ddf5f2be7961c3a85178cb85dba78cb4"
     integrity sha1-DPaLud318r55YcOoUXjLhdunjLQ=
   
-  content-type@~1.0.4:
+  content-type@^1.0.4, content-type@~1.0.4:
     version "1.0.4"
     resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
     integrity sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==
@@ -469,7 +537,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
     integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
   
-  cors@^2.8.4:
+  cors@^2.8.4, cors@^2.8.5:
     version "2.8.5"
     resolved "https://registry.yarnpkg.com/cors/-/cors-2.8.5.tgz#eac11da51592dd86b9f06f6e7ac293b3df875d29"
     integrity sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==
@@ -532,6 +600,13 @@ Lockfile:
       readable-stream "1.1.x"
       streamsearch "0.1.2"
   
+  dicer@0.3.0:
+    version "0.3.0"
+    resolved "https://registry.yarnpkg.com/dicer/-/dicer-0.3.0.tgz#eacd98b3bfbf92e8ab5c2fdb71aaac44bb06b872"
+    integrity sha512-MdceRRWqltEG2dZqO769g27N/3PXfcKl04VhYnBlo2YhH7zPi88VebsjTKclaOyiuMaGU72hTfw3VkUitGcVCA==
+    dependencies:
+      streamsearch "0.1.2"
+  
   diff@^3.1.0:
     version "3.5.0"
     resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
@@ -589,7 +664,17 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
     integrity sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=
   
-  express@^4.16.3:
+  express-graphql@^0.7.1:
+    version "0.7.1"
+    resolved "https://registry.yarnpkg.com/express-graphql/-/express-graphql-0.7.1.tgz#6c7712ee966c3aba1930e064ea4c8181e56fd3ef"
+    integrity sha512-YpheAqTbSKpb5h57rV2yu2dPNUBi4FvZDspZ5iEV3ov34PBRgnM4lEBkv60+vZRJ6SweYL14N8AGYdov7g6ooQ==
+    dependencies:
+      accepts "^1.3.5"
+      content-type "^1.0.4"
+      http-errors "^1.7.1"
+      raw-body "^2.3.3"
+  
+  express@^4.16.3, express@^4.16.4:
     version "4.16.4"
     resolved "https://registry.yarnpkg.com/express/-/express-4.16.4.tgz#fddef61926109e24c515ea97fd2f1bdbf62df12e"
     integrity sha512-j12Uuyb4FMrd/qQAm6uCHAkPtO8FDTRJZBDd5D2KOL2eLaz1yUNdUB/NOIyq0iU4q4cFarsUCrnFDPBcnksuOg==
@@ -666,6 +751,11 @@ Lockfile:
     version "0.5.2"
     resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
     integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
+  
+  fs-capacitor@^1.0.0:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/fs-capacitor/-/fs-capacitor-1.0.1.tgz#ff9dbfa14dfaf4472537720f19c3088ed9278df0"
+    integrity sha512-XdZK0Q78WP29Vm3FGgJRhRhrBm51PagovzWtW2kJ3Q6cYJbGtZqWSGTSPwvtEkyjIirFd7b8Yes/dpOYjt4RRQ==
   
   graphql-config@2.2.1:
     version "2.2.1"
@@ -757,6 +847,16 @@ Lockfile:
       iterall "^1.1.3"
       uuid "^3.1.0"
   
+  graphql-upload@^8.0.3:
+    version "8.0.3"
+    resolved "https://registry.yarnpkg.com/graphql-upload/-/graphql-upload-8.0.3.tgz#54b2ca0b105e9eb90189c62763f21618d339bd58"
+    integrity sha512-Wh+Ug8ezLz7zMuLkatM627taNpWdPgyWzZiSXAvgotx27Z15VGhlSVB6BslBfyP8uHJJPdUNXhXDg4Z1a+/UIA==
+    dependencies:
+      busboy "^0.3.0"
+      fs-capacitor "^1.0.0"
+      http-errors "^1.7.1"
+      object-path "^0.11.4"
+  
   graphql-yoga@^1.16.8:
     version "1.16.8"
     resolved "https://registry.yarnpkg.com/graphql-yoga/-/graphql-yoga-1.16.8.tgz#b0c3c4fe196734b22b57bd2d11edaf0b2093b3d1"
@@ -800,6 +900,17 @@ Lockfile:
       inherits "2.0.3"
       setprototypeof "1.1.0"
       statuses ">= 1.4.0 < 2"
+  
+  http-errors@^1.7.1:
+    version "1.7.1"
+    resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.7.1.tgz#6a4ffe5d35188e1c39f872534690585852e1f027"
+    integrity sha512-jWEUgtZWGSMba9I1N3gc1HmvpBUaNC9vDdA46yScAdp+C5rdEuKWUBLWTQpW9FwSWSbYYs++b6SDCxf9UEJzfw==
+    dependencies:
+      depd "~1.1.2"
+      inherits "2.0.3"
+      setprototypeof "1.1.0"
+      statuses ">= 1.5.0 < 2"
+      toidentifier "1.0.0"
   
   http-link-dataloader@^0.1.6:
     version "0.1.6"
@@ -1010,6 +1121,11 @@ Lockfile:
     dependencies:
       minimist "0.0.8"
   
+  moment@^2.23.0:
+    version "2.23.0"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
+    integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
+  
   ms@2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -1164,7 +1280,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
     integrity sha1-9JvmtIeJTdxA3MlKMi9hEJLgDV4=
   
-  raw-body@2.3.3:
+  raw-body@2.3.3, raw-body@^2.3.3:
     version "2.3.3"
     resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.3.3.tgz#1b324ece6b5706e153855bc1148c65bb7f6ea0c3"
     integrity sha512-9esiElv1BrZoI3rCDuOuKCBRbuApGGaDPQfjSflGxdy4oyzqghxu6klEkkVIvBje+FF0BX9coEv8KqW6X/7njw==
@@ -1279,7 +1395,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
     integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
   
-  "statuses@>= 1.4.0 < 2":
+  "statuses@>= 1.4.0 < 2", "statuses@>= 1.5.0 < 2":
     version "1.5.0"
     resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
     integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
@@ -1321,6 +1437,11 @@ Lockfile:
     version "1.2.0"
     resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
     integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
+  
+  toidentifier@1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
+    integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
   
   tough-cookie@^2.0.0:
     version "2.5.0"
@@ -1397,7 +1518,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
     integrity sha512-DIWtzUkw04M4k3bf1IcpS2tngXEL26YUD2M0tMDUpnUrz2hgzUBlD55a4FjdLGPvfHxS6uluGWvaVEqgBcVa+g==
   
-  uuid@^3.1.0:
+  uuid@3.3.2, uuid@^3.1.0, uuid@^3.3.2:
     version "3.3.2"
     resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
     integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==

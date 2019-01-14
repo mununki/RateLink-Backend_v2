@@ -40,8 +40,9 @@ export const profile = {
       args: any,
       ctx: ContextWithUser
     ): Promise<UserResponse> => {
-      const { stream, filename, mimetype } = await args.file;
-      console.log(mimetype);
+      const { createReadStream, filename, mimetype } = await args.file;
+      const stream = createReadStream();
+
       const reImageFile = /^([a-zA-Z0-9\s_\\.\-\(\):])+(.jpg|.jpeg|.gif|.png)$/;
       if (
         !reImageFile.test(filename) ||
