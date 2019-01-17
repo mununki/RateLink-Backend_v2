@@ -25,7 +25,7 @@ export const uploadToS3 = ({ stream, filename }) => {
       .promise();
 
     const fullUrl = response.Location;
-    const url = fullUrl.slice(process.env.AWS_S3_ENDPOINT.length);
+    const url = fullUrl.slice(process.env.AWS_S3_ENDPOINT.length + 16);
 
     resolve(url);
   });
@@ -42,7 +42,10 @@ export const deletePrevProfileImage = url => {
         Key: filename
       },
       (err, data) => {
-        if (err) reject(err);
+        if (err) {
+          console.log(err);
+          reject(err);
+        }
         resolve(data);
       }
     );

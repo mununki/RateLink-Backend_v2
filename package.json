@@ -7,8 +7,8 @@
     "express-graphql": "^0.7.1",
     "graphql-tools": "^4.0.3",
     "graphql-upload": "^8.0.3",
-    "graphql-yoga": "^1.16.8",
     "jsonwebtoken": "^8.4.0",
+    "merge-graphql-schemas": "^1.5.8",
     "moment": "^2.23.0",
     "prisma-client-lib": "^1.23.1",
     "uuid": "^3.3.2"
@@ -29,7 +29,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node ./src/index.js",
     "predev": "yarn types",
-    "pretypes": "gql-merge --out-file ./src/schema.graphql ./src/**/**/*.graphql",
+    "pretypes": "gql-merge --out-file ./src/schema.graphql ./src/resolvers/**/*.graphql",
     "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
     "prebuild": "rm -rf dist",
     "build": "tsc",

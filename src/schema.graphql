@@ -1,25 +1,12 @@
 type Mutation {
+  addRateReader(userId: Int!): User!
+  removeRateReader(userId: Int!): User!
+  setRate(rateId: Int, newRate: String, handler: String!): [Rate]
   signup(email: String!, password: String!, nickname: String!): LoginResponse
   login(email: String!, password: String!): LoginResponse
   updateProfile(company: String, image: String, job_boolean: String, profile_name: String): UserResponse!
   updateProfileImage(file: Upload!): UserResponse!
-  addRateReader(userId: Int!): User!
-  removeRateReader(userId: Int!): User!
-  setRate(rateId: Int, newRate: String, handler: String!): [Rate]
 }
-
-type LoginResponse {
-  ok: Boolean
-  data: TokenResponse
-  error: String
-}
-
-type TokenResponse {
-  token: String
-  user: User
-}
-
-scalar Upload
 
 type Query {
   getReaders: [User]!
@@ -106,6 +93,19 @@ type CNTRtype {
   id: Int!
   name: String!
 }
+
+type LoginResponse {
+  ok: Boolean
+  data: TokenResponse
+  error: String
+}
+
+type TokenResponse {
+  token: String
+  user: User
+}
+
+scalar Upload
 
 type User {
   id: Int!
