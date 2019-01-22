@@ -43,7 +43,7 @@ export default {
         // const reImageFile = /^([a-zA-Z0-9\s_\\.\-\(\):])+(.jpg|.jpeg|.gif|.png)$/;
         if (
           // !reImageFile.test(filename) ||
-          !allowedMIMEtypes.includes(mimetype)
+          allowedMIMEtypes.filter(type => type === mimetype).length < 1
         ) {
           await new Promise((resolve, reject) => {
             stream.resume();
