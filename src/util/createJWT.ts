@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { rejects } from "assert";
 
 const createJWT = (id: number): Promise<string> => {
   return new Promise((resolve, reject) => {

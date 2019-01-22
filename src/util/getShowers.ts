@@ -1,8 +1,10 @@
-import { Context } from "../types/resolver";
 import { Account_myuser } from "../../generated/prisma-client";
+import { Context } from "../types/resolver";
 
 const getShowers = async (ctx: Context): Promise<number[]> => {
-  if (!ctx.user) return [];
+  if (!ctx.user) {
+    return [];
+  }
   // query user + showers input locations
   const showers = await ctx.prisma.account_myusers({
     where: {

@@ -1,4 +1,7 @@
+/* eslint-disable import/first */
+/* eslint-disable import/no-unresolved */
 import dotenv from "dotenv";
+
 dotenv.config();
 
 import express from "express";
@@ -18,8 +21,8 @@ app.use(cors());
 app.use(
   "/",
   graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
-  graphqlHTTP(async (request, response, graphQLParams) => {
-    let user = undefined;
+  graphqlHTTP(async request => {
+    let user;
     if (request.headers.authorization) {
       const token = request.headers.authorization || "";
       if (token) {

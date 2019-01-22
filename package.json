@@ -23,6 +23,13 @@
     "@types/jsonwebtoken": "^8.3.0",
     "@types/uuid": "^3.4.4",
     "@types/ws": "^6.0.1",
+    "eslint": "^5.12.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.5.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.12.4",
+    "tslint": "^5.12.1",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2"
   },
@@ -33,7 +40,9 @@
     "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
     "prebuild": "rm -rf dist",
     "build": "tsc",
-    "postbuild": "cp ./src/*.graphql ./dist/src/",
-    "start": "node ./dist/src/index.js"
+    "postbuild": "copy ./src/resolvers/**/*.graphql ./dist/src/resolvers/",
+    "start": "node ./dist/src/index.js",
+    "lint:js": "yarn eslint .",
+    "lint": "yarn tslint 'src/**/*.ts?(x)'"
   }
 }

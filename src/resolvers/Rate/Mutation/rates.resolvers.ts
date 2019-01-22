@@ -1,10 +1,7 @@
+import moment = require("moment");
+import { Rate_rate, Rate_ratePromise } from "../../../../generated/prisma-client";
 import { ContextWithUser, newRateSelectedField } from "../../../types/resolver";
 import privateResolver from "../../../util/privateResolver";
-import {
-  Rate_rate,
-  Rate_ratePromise
-} from "../../../../generated/prisma-client";
-import moment = require("moment");
 
 // newRate: {
 //   selectedIp: [{ value: this.props.USER_ID }],
@@ -30,11 +27,8 @@ import moment = require("moment");
 //   remark: this.props.rate ? this.props.rate.remark : ""
 // }
 
-const saveMultipleRates = async (
-  inputNewRate: any,
-  ctx: ContextWithUser
-): Promise<Rate_rate[]> => {
-  let rates: Rate_rate[] = [];
+const saveMultipleRates = async (inputNewRate: any, ctx: ContextWithUser): Promise<Rate_rate[]> => {
+  const rates: Rate_rate[] = [];
 
   await Promise.all(
     inputNewRate.selectedCt.map(
@@ -49,51 +43,30 @@ const saveMultipleRates = async (
                       inputNewRate.selectedPd.map(
                         async (pod: newRateSelectedField) =>
                           await Promise.all(
-                            inputNewRate.selectedTy.map(
-                              async (type: newRateSelectedField) => {
-                                const rate = await ctx.prisma.createRate_rate({
-                                  inputperson: { connect: { id: ctx.user.id } },
-                                  account: { connect: { id: client.value } },
-                                  liner: { connect: { id: liner.value } },
-                                  pol: { connect: { id: pol.value } },
-                                  pod: { connect: { id: pod.value } },
-                                  type: { connect: { id: type.value } },
-                                  buying20: parseInt(inputNewRate.buying20, 10),
-                                  buying40: parseInt(inputNewRate.buying40, 10),
-                                  buying4H: parseInt(inputNewRate.buying4H, 10),
-                                  selling20: parseInt(
-                                    inputNewRate.selling20,
-                                    10
-                                  ),
-                                  selling40: parseInt(
-                                    inputNewRate.selling40,
-                                    10
-                                  ),
-                                  selling4H: parseInt(
-                                    inputNewRate.selling4H,
-                                    10
-                                  ),
-                                  loadingFT: parseInt(
-                                    inputNewRate.loadingFT,
-                                    10
-                                  ),
-                                  dischargingFT: parseInt(
-                                    inputNewRate.dischargingFT,
-                                    10
-                                  ),
-                                  offeredDate: moment(
-                                    inputNewRate.offeredDate
-                                  ).format(),
-                                  effectiveDate: moment(
-                                    inputNewRate.effectiveDate
-                                  ).format(),
-                                  recordedDate: moment().format(),
-                                  remark: inputNewRate.remark,
-                                  deleted: false
-                                });
-                                rates.push(rate);
-                              }
-                            )
+                            inputNewRate.selectedTy.map(async (type: newRateSelectedField) => {
+                              const rate = await ctx.prisma.createRate_rate({
+                                account: { connect: { id: client.value } },
+                                buying20: parseInt(inputNewRate.buying20, 10),
+                                buying40: parseInt(inputNewRate.buying40, 10),
+                                buying4H: parseInt(inputNewRate.buying4H, 10),
+                                deleted: false,
+                                dischargingFT: parseInt(inputNewRate.dischargingFT, 10),
+                                effectiveDate: moment(inputNewRate.effectiveDate).format(),
+                                inputperson: { connect: { id: ctx.user.id } },
+                                liner: { connect: { id: liner.value } },
+                                loadingFT: parseInt(inputNewRate.loadingFT, 10),
+                                offeredDate: moment(inputNewRate.offeredDate).format(),
+                                pod: { connect: { id: pod.value } },
+                                pol: { connect: { id: pol.value } },
+                                recordedDate: moment().format(),
+                                remark: inputNewRate.remark,
+                                selling20: parseInt(inputNewRate.selling20, 10),
+                                selling40: parseInt(inputNewRate.selling40, 10),
+                                selling4H: parseInt(inputNewRate.selling4H, 10),
+                                type: { connect: { id: type.value } }
+                              });
+                              rates.push(rate);
+                            })
                           )
                       )
                     )
@@ -109,48 +82,47 @@ const saveMultipleRates = async (
 export default {
   Mutation: {
     setRate: privateResolver(
-      async (
-        root: any,
-        args: any,
-        ctx: ContextWithUser
-      ): Promise<Rate_rate[]> => {
-        let rates: Rate_rate[] = [];
+      async (root: any, args: any, ctx: ContextWithUser): Promise<Rate_rate[]> => {
+        const rates: Rate_rate[] = [];
         if (args.handler === "add") {
           const inputNewRate = JSON.parse(args.newRate);
           return saveMultipleRates(inputNewRate, ctx); // add rates
         } else if (args.handler === "modify") {
-          if (!args.rateId) throw new Error("rateId is missing!");
+          if (!args.rateId) {
+            throw new Error("rateId is missing!");
+          }
 
           const prevInputperson = await ctx.prisma.account_myusers({
             where: { rate_rates_some: { id: args.rateId } }
           });
 
-          if (prevInputperson[0].id !== ctx.user.id)
+          if (prevInputperson[0].id !== ctx.user.id) {
             throw new Error("This is not your rate.");
+          }
 
           const inputNewRate = JSON.parse(args.newRate);
           const rate = await ctx.prisma.updateRate_rate({
             // modify rate
             data: {
-              inputperson: { connect: { id: ctx.user.id } },
               account: { connect: { id: inputNewRate.selectedCt[0].value } },
-              liner: { connect: { id: inputNewRate.selectedLn[0].value } },
-              pol: { connect: { id: inputNewRate.selectedPl[0].value } },
-              pod: { connect: { id: inputNewRate.selectedPd[0].value } },
-              type: { connect: { id: inputNewRate.selectedTy[0].value } },
               buying20: parseInt(inputNewRate.buying20, 10),
               buying40: parseInt(inputNewRate.buying40, 10),
               buying4H: parseInt(inputNewRate.buying4H, 10),
+              deleted: false,
+              dischargingFT: parseInt(inputNewRate.dischargingFT, 10),
+              effectiveDate: moment(inputNewRate.effectiveDate).format(),
+              inputperson: { connect: { id: ctx.user.id } },
+              liner: { connect: { id: inputNewRate.selectedLn[0].value } },
+              loadingFT: parseInt(inputNewRate.loadingFT, 10),
+              offeredDate: moment(inputNewRate.offeredDate).format(),
+              pod: { connect: { id: inputNewRate.selectedPd[0].value } },
+              pol: { connect: { id: inputNewRate.selectedPl[0].value } },
+              recordedDate: moment().format(),
+              remark: inputNewRate.remark,
               selling20: parseInt(inputNewRate.selling20, 10),
               selling40: parseInt(inputNewRate.selling40, 10),
               selling4H: parseInt(inputNewRate.selling4H, 10),
-              loadingFT: parseInt(inputNewRate.loadingFT, 10),
-              dischargingFT: parseInt(inputNewRate.dischargingFT, 10),
-              offeredDate: moment(inputNewRate.offeredDate).format(),
-              effectiveDate: moment(inputNewRate.effectiveDate).format(),
-              recordedDate: moment().format(),
-              remark: inputNewRate.remark,
-              deleted: false
+              type: { connect: { id: inputNewRate.selectedTy[0].value } }
             },
             where: { id: args.rateId }
           });
@@ -158,7 +130,9 @@ export default {
 
           return rates;
         } else if (args.handler === "duplicate") {
-          if (!args.rateId) throw new Error("rateId is missing!");
+          if (!args.rateId) {
+            throw new Error("rateId is missing!");
+          }
 
           const targetRate = await ctx.prisma.rate_rates({
             where: { id: args.rateId }
@@ -179,30 +153,32 @@ export default {
             where: { rate_rates_some: { id: args.rateId } }
           });
           const duplicatedRate = await ctx.prisma.createRate_rate({
-            inputperson: { connect: { id: ctx.user.id } },
             account: { connect: { id: targetRateClient[0].id } },
-            liner: { connect: { id: targetRateLiner[0].id } },
-            pol: { connect: { id: targetRatePol[0].id } },
-            pod: { connect: { id: targetRatePod[0].id } },
-            type: { connect: { id: targetRateCNTRtype[0].id } },
             buying20: targetRate[0].buying20,
             buying40: targetRate[0].buying40,
             buying4H: targetRate[0].buying4H,
+            deleted: false,
+            dischargingFT: targetRate[0].dischargingFT,
+            effectiveDate: targetRate[0].effectiveDate,
+            inputperson: { connect: { id: ctx.user.id } },
+            liner: { connect: { id: targetRateLiner[0].id } },
+            loadingFT: targetRate[0].loadingFT,
+            offeredDate: targetRate[0].offeredDate,
+            pod: { connect: { id: targetRatePod[0].id } },
+            pol: { connect: { id: targetRatePol[0].id } },
+            recordedDate: moment().format(),
+            remark: targetRate[0].remark,
             selling20: targetRate[0].selling20,
             selling40: targetRate[0].selling40,
             selling4H: targetRate[0].selling4H,
-            loadingFT: targetRate[0].loadingFT,
-            dischargingFT: targetRate[0].dischargingFT,
-            offeredDate: targetRate[0].offeredDate,
-            effectiveDate: targetRate[0].effectiveDate,
-            recordedDate: moment().format(),
-            remark: targetRate[0].remark,
-            deleted: false
+            type: { connect: { id: targetRateCNTRtype[0].id } }
           });
 
           return [duplicatedRate];
         } else if (args.handler === "delete") {
-          if (!args.rateId) throw new Error("rateId is missing!");
+          if (!args.rateId) {
+            throw new Error("rateId is missing!");
+          }
 
           const deletedRate = await ctx.prisma.updateRate_rate({
             // modify rate

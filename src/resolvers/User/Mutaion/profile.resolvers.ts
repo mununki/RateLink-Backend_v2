@@ -1,10 +1,6 @@
-import {
-  Context,
-  UserResponse,
-  ContextWithUser
-} from "../../../types/resolver";
+import { Context, ContextWithUser, UserResponse } from "../../../types/resolver";
+import { deletePrevProfileImage, uploadToS3 } from "../../../util/handleS3";
 import privateResolver from "../../../util/privateResolver";
-import { uploadToS3, deletePrevProfileImage } from "../../../util/handleS3";
 
 const allowedMIMEtypes = ["image/jpeg", "image/png", "image/git"];
 
@@ -15,37 +11,31 @@ const checkVaildJob_boolean = (inputJob: string): boolean => {
 
 export default {
   Mutation: {
-    updateProfile: async (
-      root: any,
-      args: any,
-      ctx: Context
-    ): Promise<UserResponse> => {
-      if (!ctx.user)
+    updateProfile: async (root: any, args: any, ctx: Context): Promise<UserResponse> => {
+      if (!ctx.user) {
         return { ok: false, data: null, error: "Log in required!" };
+      }
 
       const { company, image, profile_name } = args;
-      let { job_boolean } = args;
+      const { job_boolean } = args;
 
-      if (!checkVaildJob_boolean(job_boolean))
+      if (!checkVaildJob_boolean(job_boolean)) {
         return { ok: false, data: null, error: "Invalid job selected" };
+      }
 
       const profile = await ctx.prisma.account_myuserprofilesConnection({
         where: { owner: { id: ctx.user.id } }
       });
 
       await ctx.prisma.updateAccount_myuserprofile({
-        where: { id: profile.edges[0].node.id },
-        data: { company, image, job_boolean, profile_name }
+        data: { company, image, job_boolean, profile_name },
+        where: { id: profile.edges[0].node.id }
       });
 
       return { ok: true, data: ctx.user, error: null };
     },
     updateProfileImage: privateResolver(
-      async (
-        root: any,
-        args: any,
-        ctx: ContextWithUser
-      ): Promise<UserResponse> => {
+      async (root: any, args: any, ctx: ContextWithUser): Promise<UserResponse> => {
         const { createReadStream, filename, mimetype } = await args.file;
         const stream = createReadStream();
 
@@ -68,14 +58,15 @@ export default {
           where: { owner: { id: ctx.user.id } }
         });
 
-        if (profile.edges[0].node.image !== "")
+        if (profile.edges[0].node.image !== "") {
           await deletePrevProfileImage(profile.edges[0].node.image);
+        }
 
         const url = await uploadToS3({ stream, filename });
 
         await ctx.prisma.updateAccount_myuserprofile({
-          where: { id: profile.edges[0].node.id },
-          data: { image: url }
+          data: { image: url },
+          where: { id: profile.edges[0].node.id }
         });
 
         return { ok: true, data: ctx.user, error: null };

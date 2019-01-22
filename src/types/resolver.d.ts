@@ -1,4 +1,4 @@
-import { Prisma, Account_myuser } from "../../generated/prisma-client";
+import { Account_myuser, Prisma } from "../../generated/prisma-client";
 import { Rate_rateConnection } from "../../generated/prisma-client";
 
 export interface Context {
