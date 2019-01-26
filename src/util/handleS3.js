@@ -10,10 +10,10 @@ const s3 = new aws.S3({
   endpoint: process.env.AWS_S3_ENDPOINT
 });
 
-export const uploadToS3 = ({ stream, filename }) =>
+export const uploadToS3 = ({ stream, filename, userId }) =>
   new Promise(async resolve => {
     const extension = filename.split(".").pop();
-    const key = `profile_images/${uuid()}.${extension}`;
+    const key = `profile_images/${userId}/${uuid()}.${extension}`;
 
     // Upload to S3
     const response = await s3
@@ -25,7 +25,7 @@ export const uploadToS3 = ({ stream, filename }) =>
       .promise();
 
     const fullUrl = response.Location;
-    const url = fullUrl.slice(process.env.AWS_S3_ENDPOINT.length + 16);
+    const url = fullUrl.slice(55);
 
     resolve(url);
   });

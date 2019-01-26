@@ -17,7 +17,7 @@ type Query {
   getLiners(search: String, showOurs: Boolean): [Liner]
   getLocations(search: String, showOurs: Boolean, polOrPod: String): [Location]
   getCNTRtypes(search: String, showOurs: Boolean): [CNTRtype]
-  me: UserResponse!
+  me: UserResponse
   findUsers(email: String, nickname: String, profile_name: String, company: String): [User]
   checkIfExist(email: String!): Boolean!
 }

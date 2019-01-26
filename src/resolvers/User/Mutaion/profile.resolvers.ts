@@ -23,12 +23,19 @@ export default {
         return { ok: false, data: null, error: "Invalid job selected" };
       }
 
-      const profile = await ctx.prisma.account_myuserprofilesConnection({
-        where: { owner: { id: ctx.user.id } }
-      });
+      let profile;
+      try {
+        profile = await ctx.prisma.account_myuserprofilesConnection({
+          where: { owner: { id: ctx.user.id } }
+        });
+      } catch (e) {
+        console.log(profile);
+        return { ok: false, data: null, error: "Profile doesn't exist" };
+      }
 
       await ctx.prisma.updateAccount_myuserprofile({
         data: { company, image, job_boolean, profile_name },
+        // where: { id: profile.edges[0].node.id }
         where: { id: profile.edges[0].node.id }
       });
 
@@ -62,12 +69,21 @@ export default {
           await deletePrevProfileImage(profile.edges[0].node.image);
         }
 
-        const url = await uploadToS3({ stream, filename });
+        let url;
+        try {
+          url = await uploadToS3({ stream, filename, userId: ctx.user.id });
+        } catch (e) {
+          return { ok: false, data: null, error: "Failure to save" };
+        }
 
-        await ctx.prisma.updateAccount_myuserprofile({
-          data: { image: url },
-          where: { id: profile.edges[0].node.id }
-        });
+        if (url) {
+          await ctx.prisma.updateAccount_myuserprofile({
+            data: { image: url },
+            where: { id: profile.edges[0].node.id }
+          });
+        } else {
+          return { ok: false, data: null, error: "Failure to save" };
+        }
 
         return { ok: true, data: ctx.user, error: null };
       }

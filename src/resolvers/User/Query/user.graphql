@@ -1,11 +1,6 @@
 type Query {
-  me: UserResponse!
-  findUsers(
-    email: String
-    nickname: String
-    profile_name: String
-    company: String
-  ): [User]
+  me: UserResponse
+  findUsers(email: String, nickname: String, profile_name: String, company: String): [User]
   checkIfExist(email: String!): Boolean!
 }
 

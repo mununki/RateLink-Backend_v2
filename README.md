@@ -26,4 +26,3 @@
 - [x] Query each field for autocomplete in front-end
 - [x] Rate Mutation (create, update)
 - [x] Query for charts
-- [x] Save the profile image to AWS S3 (remove the previous one)

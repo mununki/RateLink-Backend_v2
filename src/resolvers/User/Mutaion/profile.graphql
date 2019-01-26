@@ -1,11 +1,6 @@
 scalar Upload
 
 type Mutation {
-  updateProfile(
-    company: String
-    image: String
-    job_boolean: String
-    profile_name: String
-  ): UserResponse!
+  updateProfile(company: String, image: String, job_boolean: String, profile_name: String): UserResponse!
   updateProfileImage(file: Upload!): UserResponse!
 }
