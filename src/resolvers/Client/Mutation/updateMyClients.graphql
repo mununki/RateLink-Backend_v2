@@ -1,0 +1,3 @@
+type Mutation {
+  updateMyClients(clientId: Int!, name: String, remark: String): Client
+}

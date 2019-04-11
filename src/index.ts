@@ -4,8 +4,8 @@ dotenv.config();
 
 import { GraphQLServer } from "graphql-yoga";
 import { Prisma } from "../generated/prisma-client";
-import decodeJWT from "./util/decodeJWT";
 import schema from "./schema";
+import decodeJWT from "./util/decodeJWT";
 
 const prisma = new Prisma();
 

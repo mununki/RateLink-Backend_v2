@@ -34,6 +34,7 @@
     "predev": "yarn types",
     "pretypes": "gql-merge --out-file ./src/schema.graphql ./src/resolvers/**/*.graphql",
     "types": "graphql-to-typescript ./src/schema.graphql ./src/types/graph.d.ts",
+    "copytypes": "cp ./src/types/graph.d.ts ../ratelink-frontend/types/",
     "prebuild": "rm -rf dist",
     "build": "tsc && copy ./src/resolvers/**/*.graphql ./dist/src/resolvers/",
     "start": "node ./dist/src/index.js",
