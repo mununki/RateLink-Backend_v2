@@ -11,7 +11,7 @@ type Mutation {
 }
 
 type Query {
-  getMyClients(search: String): [Client]!
+  getMyClients(before: String, last: Int, after: String, first: Int, search: String): ClientResponse
   getReaders: [User]!
   getShowers: [User]!
   getRates(before: String, last: Int, after: String, first: Int, queryParams: String): RateResponse
@@ -25,8 +25,24 @@ type Query {
   checkIfExist(email: String!): Boolean!
 }
 
+type ClientResponse {
+  ok: Boolean!
+  data: Rate_clientConnection
+  error: String
+}
+
+type Rate_clientConnection {
+  pageInfo: PageInfo
+  edges: [Rate_clientEdge]
+}
+
+type Rate_clientEdge {
+  node: Client
+  cursor: String
+}
+
 type RateResponse {
-  ok: Boolean
+  ok: Boolean!
   data: Rate_rateConnection
   error: String
 }

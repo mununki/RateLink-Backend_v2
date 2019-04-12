@@ -1,11 +1,5 @@
 type Query {
-  getRates(
-    before: String
-    last: Int
-    after: String
-    first: Int
-    queryParams: String
-  ): RateResponse
+  getRates(before: String, last: Int, after: String, first: Int, queryParams: String): RateResponse
   getInputpersons(search: String): [User]
   getClients(search: String): [Client]
   getLiners(search: String, showOurs: Boolean): [Liner]
@@ -14,7 +8,7 @@ type Query {
 }
 
 type RateResponse {
-  ok: Boolean
+  ok: Boolean!
   data: Rate_rateConnection
   error: String
 }

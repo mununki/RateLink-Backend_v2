@@ -1,5 +1,5 @@
 import { Account_myuser, Prisma } from "../../generated/prisma-client";
-import { Rate_rateConnection } from "../../generated/prisma-client";
+import { Rate_clientConnection, Rate_rateConnection } from "../../generated/prisma-client";
 
 export interface Context {
   request: any;
@@ -55,5 +55,11 @@ export interface LoginResponse {
     token: string | null;
     user: Account_myuser | null;
   };
+  error: string | null;
+}
+
+export interface ClientResponse {
+  ok: boolean;
+  data: Rate_clientConnection | null;
   error: string | null;
 }
