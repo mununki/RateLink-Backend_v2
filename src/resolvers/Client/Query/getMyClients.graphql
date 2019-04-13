@@ -1,9 +1,10 @@
 type Query {
-  getMyClients(before: String, last: Int, after: String, first: Int, search: String): ClientResponse
+  getMyClients(skip: Int, before: String, last: Int, after: String, first: Int, search: String): ClientResponse
 }
 
 type ClientResponse {
   ok: Boolean!
+  count: Int!
   data: Rate_clientConnection
   error: String
 }

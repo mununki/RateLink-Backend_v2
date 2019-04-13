@@ -61,5 +61,6 @@ export interface LoginResponse {
 export interface ClientResponse {
   ok: boolean;
   data: Rate_clientConnection | null;
+  count: number;
   error: string | null;
 }
