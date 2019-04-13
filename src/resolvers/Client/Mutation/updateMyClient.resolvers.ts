@@ -1,13 +1,13 @@
-import moment = require("moment");
+import moment from "moment";
 import { Rate_client } from "../../../../generated/prisma-client";
-import { UpdateMyClientsMutationArgs } from "../../../types/graph";
+import { UpdateMyClientMutationArgs } from "../../../types/graph";
 import { ContextWithUser } from "../../../types/resolver";
 import privateResolver from "../../../util/privateResolver";
 
 export default {
   Mutation: {
-    updateMyClients: privateResolver(
-      async (_: any, args: UpdateMyClientsMutationArgs, ctx: ContextWithUser): Promise<Rate_client | null> => {
+    updateMyClient: privateResolver(
+      async (_: any, args: UpdateMyClientMutationArgs, ctx: ContextWithUser): Promise<Rate_client | null> => {
         try {
           const prevClient = await ctx.prisma.rate_client({ id: args.clientId });
 
