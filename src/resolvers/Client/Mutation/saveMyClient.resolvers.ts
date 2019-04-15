@@ -1,14 +1,19 @@
 import moment from "moment";
-import { Rate_client } from "../../../../generated/prisma-client";
 import { SaveMyClientMutationArgs } from "../../../types/graph";
-import { ContextWithUser } from "../../../types/resolver";
+import { ClientResponse, ContextWithUser } from "../../../types/resolver";
 import privateResolver from "../../../util/privateResolver";
 
 export default {
   Mutation: {
     saveMyClient: privateResolver(
-      async (_: any, args: SaveMyClientMutationArgs, ctx: ContextWithUser): Promise<Rate_client | null> => {
+      async (_: any, args: SaveMyClientMutationArgs, ctx: ContextWithUser): Promise<ClientResponse> => {
         try {
+          const checkIfExist = await ctx.prisma.rate_clients({ where: { name: args.name } });
+
+          if (checkIfExist.length > 0) {
+            return { ok: false, error: "Already exists", client: null };
+          }
+
           const client = await ctx.prisma.createRate_client({
             name: args.name,
             recordedDate: moment().format(),
@@ -20,9 +25,9 @@ export default {
             }
           });
 
-          return client;
+          return { ok: true, error: null, client };
         } catch (e) {
-          return null;
+          return { ok: false, error: "Faied to save", client: null };
         }
       }
     )

@@ -58,9 +58,15 @@ export interface LoginResponse {
   error: string | null;
 }
 
-export interface ClientResponse {
+export interface ClientsResponse {
   ok: boolean;
   data: Rate_clientConnection | null;
   count: number;
   error: string | null;
+}
+
+export interface ClientResponse {
+  ok: boolean;
+  error: string | null;
+  client: Client | null;
 }

@@ -1,6 +1,6 @@
 type Mutation {
-  saveMyClients(name: String!, remark: String): Client
-  updateMyClients(clientId: Int!, name: String, remark: String): Client
+  saveMyClient(name: String!, remark: String): ClientResponse!
+  updateMyClient(clientId: Int!, name: String, remark: String): ClientResponse!
   addRateReader(userId: Int!): User!
   removeRateReader(userId: Int!): User!
   setRate(rateId: Int, newRate: String, handler: String!): [Rate]
@@ -11,7 +11,8 @@ type Mutation {
 }
 
 type Query {
-  getMyClients(before: String, last: Int, after: String, first: Int, search: String): ClientResponse
+  getMyClient(clientId: Int!): ClientResponse!
+  getMyClients(skip: Int, before: String, last: Int, after: String, first: Int, search: String): ClientsResponse
   getReaders: [User]!
   getShowers: [User]!
   getRates(before: String, last: Int, after: String, first: Int, queryParams: String): RateResponse
@@ -27,6 +28,13 @@ type Query {
 
 type ClientResponse {
   ok: Boolean!
+  error: String
+  client: Client
+}
+
+type ClientsResponse {
+  ok: Boolean!
+  count: Int!
   data: Rate_clientConnection
   error: String
 }

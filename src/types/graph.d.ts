@@ -1,8 +1,9 @@
-export const typeDefs = ["type Mutation {\n  saveMyClients(name: String!, remark: String): Client\n  updateMyClients(clientId: Int!, name: String, remark: String): Client\n  addRateReader(userId: Int!): User!\n  removeRateReader(userId: Int!): User!\n  setRate(rateId: Int, newRate: String, handler: String!): [Rate]\n  signup(email: String!, password: String!, nickname: String!): LoginResponse\n  login(email: String!, password: String!): LoginResponse\n  updateProfile(company: String, image: String, job_boolean: String, profile_name: String): UserResponse!\n  updateProfileImage(file: Upload!): UserResponse!\n}\n\ntype Query {\n  getMyClients(before: String, last: Int, after: String, first: Int, search: String): ClientResponse\n  getReaders: [User]!\n  getShowers: [User]!\n  getRates(before: String, last: Int, after: String, first: Int, queryParams: String): RateResponse\n  getInputpersons(search: String): [User]\n  getClients(search: String): [Client]\n  getLiners(search: String, showOurs: Boolean): [Liner]\n  getLocations(search: String, showOurs: Boolean, polOrPod: String): [Location]\n  getCNTRtypes(search: String, showOurs: Boolean): [CNTRtype]\n  me: UserResponse\n  findUsers(email: String, nickname: String, profile_name: String, company: String): [User]\n  checkIfExist(email: String!): Boolean!\n}\n\ntype ClientResponse {\n  ok: Boolean!\n  data: Rate_clientConnection\n  error: String\n}\n\ntype Rate_clientConnection {\n  pageInfo: PageInfo\n  edges: [Rate_clientEdge]\n}\n\ntype Rate_clientEdge {\n  node: Client\n  cursor: String\n}\n\ntype RateResponse {\n  ok: Boolean!\n  data: Rate_rateConnection\n  error: String\n}\n\ntype Rate_rateConnection {\n  pageInfo: PageInfo\n  edges: [Rate_rateEdge]\n}\n\ntype PageInfo {\n  hasNextPage: Boolean\n  hasPreviousPage: Boolean\n  startCursor: String\n  endCursor: String\n}\n\ntype Rate_rateEdge {\n  node: Rate\n  cursor: String\n}\n\ntype Rate {\n  id: Int!\n  inputperson: User!\n  client: Client!\n  liner: Liner!\n  pol: Location!\n  pod: Location!\n  cntrtype: CNTRtype!\n  buying20: Int\n  buying40: Int\n  buying4H: Int\n  selling20: Int\n  selling40: Int\n  selling4H: Int\n  loadingFT: Int\n  dischargingFT: Int\n  offeredDate: String\n  effectiveDate: String\n  recordedDate: String\n  remark: String\n  deleted: Boolean\n}\n\ntype Client {\n  id: Int!\n  name: String!\n  salesman: User!\n  remarks: String!\n  recordedDate: String\n}\n\ntype Liner {\n  id: Int!\n  name: String!\n  label: String!\n}\n\ntype Location {\n  id: Int!\n  name: String!\n  country: String!\n  label: String!\n}\n\ntype CNTRtype {\n  id: Int!\n  name: String!\n}\n\ntype LoginResponse {\n  ok: Boolean\n  data: TokenResponse\n  error: String\n}\n\ntype TokenResponse {\n  token: String\n  user: User\n}\n\nscalar Upload\n\ntype User {\n  id: Int!\n  email: String!\n  nickname: String!\n  password: String!\n  profile: UserProfile!\n}\n\ntype UserProfile {\n  id: Int!\n  owner: User!\n  profile_name: String!\n  company: String\n  job_boolean: String\n  image: String\n}\n\ntype UserResponse {\n  ok: Boolean\n  data: User\n  error: String\n}\n"];
+export const typeDefs = ["type Mutation {\n  saveMyClient(name: String!, remark: String): ClientResponse!\n  updateMyClient(clientId: Int!, name: String, remark: String): ClientResponse!\n  addRateReader(userId: Int!): User!\n  removeRateReader(userId: Int!): User!\n  setRate(rateId: Int, newRate: String, handler: String!): [Rate]\n  signup(email: String!, password: String!, nickname: String!): LoginResponse\n  login(email: String!, password: String!): LoginResponse\n  updateProfile(company: String, image: String, job_boolean: String, profile_name: String): UserResponse!\n  updateProfileImage(file: Upload!): UserResponse!\n}\n\ntype Query {\n  getMyClient(clientId: Int!): ClientResponse!\n  getMyClients(skip: Int, before: String, last: Int, after: String, first: Int, search: String): ClientsResponse\n  getReaders: [User]!\n  getShowers: [User]!\n  getRates(before: String, last: Int, after: String, first: Int, queryParams: String): RateResponse\n  getInputpersons(search: String): [User]\n  getClients(search: String): [Client]\n  getLiners(search: String, showOurs: Boolean): [Liner]\n  getLocations(search: String, showOurs: Boolean, polOrPod: String): [Location]\n  getCNTRtypes(search: String, showOurs: Boolean): [CNTRtype]\n  me: UserResponse\n  findUsers(email: String, nickname: String, profile_name: String, company: String): [User]\n  checkIfExist(email: String!): Boolean!\n}\n\ntype ClientResponse {\n  ok: Boolean!\n  error: String\n  client: Client\n}\n\ntype ClientsResponse {\n  ok: Boolean!\n  count: Int!\n  data: Rate_clientConnection\n  error: String\n}\n\ntype Rate_clientConnection {\n  pageInfo: PageInfo\n  edges: [Rate_clientEdge]\n}\n\ntype Rate_clientEdge {\n  node: Client\n  cursor: String\n}\n\ntype RateResponse {\n  ok: Boolean!\n  data: Rate_rateConnection\n  error: String\n}\n\ntype Rate_rateConnection {\n  pageInfo: PageInfo\n  edges: [Rate_rateEdge]\n}\n\ntype PageInfo {\n  hasNextPage: Boolean\n  hasPreviousPage: Boolean\n  startCursor: String\n  endCursor: String\n}\n\ntype Rate_rateEdge {\n  node: Rate\n  cursor: String\n}\n\ntype Rate {\n  id: Int!\n  inputperson: User!\n  client: Client!\n  liner: Liner!\n  pol: Location!\n  pod: Location!\n  cntrtype: CNTRtype!\n  buying20: Int\n  buying40: Int\n  buying4H: Int\n  selling20: Int\n  selling40: Int\n  selling4H: Int\n  loadingFT: Int\n  dischargingFT: Int\n  offeredDate: String\n  effectiveDate: String\n  recordedDate: String\n  remark: String\n  deleted: Boolean\n}\n\ntype Client {\n  id: Int!\n  name: String!\n  salesman: User!\n  remarks: String!\n  recordedDate: String\n}\n\ntype Liner {\n  id: Int!\n  name: String!\n  label: String!\n}\n\ntype Location {\n  id: Int!\n  name: String!\n  country: String!\n  label: String!\n}\n\ntype CNTRtype {\n  id: Int!\n  name: String!\n}\n\ntype LoginResponse {\n  ok: Boolean\n  data: TokenResponse\n  error: String\n}\n\ntype TokenResponse {\n  token: String\n  user: User\n}\n\nscalar Upload\n\ntype User {\n  id: Int!\n  email: String!\n  nickname: String!\n  password: String!\n  profile: UserProfile!\n}\n\ntype UserProfile {\n  id: Int!\n  owner: User!\n  profile_name: String!\n  company: String\n  job_boolean: String\n  image: String\n}\n\ntype UserResponse {\n  ok: Boolean\n  data: User\n  error: String\n}\n"];
 /* tslint:disable */
 
 export interface Query {
-  getMyClients: ClientResponse | null;
+  getMyClient: ClientResponse;
+  getMyClients: ClientsResponse | null;
   getReaders: Array<User>;
   getShowers: Array<User>;
   getRates: RateResponse | null;
@@ -16,7 +17,12 @@ export interface Query {
   checkIfExist: boolean;
 }
 
+export interface GetMyClientQueryArgs {
+  clientId: number;
+}
+
 export interface GetMyClientsQueryArgs {
+  skip: number | null;
   before: string | null;
   last: number | null;
   after: string | null;
@@ -69,25 +75,8 @@ export interface CheckIfExistQueryArgs {
 
 export interface ClientResponse {
   ok: boolean;
-  data: Rate_clientConnection | null;
   error: string | null;
-}
-
-export interface Rate_clientConnection {
-  pageInfo: PageInfo | null;
-  edges: Array<Rate_clientEdge> | null;
-}
-
-export interface PageInfo {
-  hasNextPage: boolean | null;
-  hasPreviousPage: boolean | null;
-  startCursor: string | null;
-  endCursor: string | null;
-}
-
-export interface Rate_clientEdge {
-  node: Client | null;
-  cursor: string | null;
+  client: Client | null;
 }
 
 export interface Client {
@@ -113,6 +102,30 @@ export interface UserProfile {
   company: string | null;
   job_boolean: string | null;
   image: string | null;
+}
+
+export interface ClientsResponse {
+  ok: boolean;
+  count: number;
+  data: Rate_clientConnection | null;
+  error: string | null;
+}
+
+export interface Rate_clientConnection {
+  pageInfo: PageInfo | null;
+  edges: Array<Rate_clientEdge> | null;
+}
+
+export interface PageInfo {
+  hasNextPage: boolean | null;
+  hasPreviousPage: boolean | null;
+  startCursor: string | null;
+  endCursor: string | null;
+}
+
+export interface Rate_clientEdge {
+  node: Client | null;
+  cursor: string | null;
 }
 
 export interface RateResponse {
@@ -179,8 +192,8 @@ export interface UserResponse {
 }
 
 export interface Mutation {
-  saveMyClients: Client | null;
-  updateMyClients: Client | null;
+  saveMyClient: ClientResponse;
+  updateMyClient: ClientResponse;
   addRateReader: User;
   removeRateReader: User;
   setRate: Array<Rate> | null;
@@ -190,12 +203,12 @@ export interface Mutation {
   updateProfileImage: UserResponse;
 }
 
-export interface SaveMyClientsMutationArgs {
+export interface SaveMyClientMutationArgs {
   name: string;
   remark: string | null;
 }
 
-export interface UpdateMyClientsMutationArgs {
+export interface UpdateMyClientMutationArgs {
   clientId: number;
   name: string | null;
   remark: string | null;

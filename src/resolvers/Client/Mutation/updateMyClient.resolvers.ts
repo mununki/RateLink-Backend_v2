@@ -1,15 +1,25 @@
 import moment from "moment";
-import { Rate_client } from "../../../../generated/prisma-client";
 import { UpdateMyClientMutationArgs } from "../../../types/graph";
-import { ContextWithUser } from "../../../types/resolver";
+import { ClientResponse, ContextWithUser } from "../../../types/resolver";
 import privateResolver from "../../../util/privateResolver";
 
 export default {
   Mutation: {
     updateMyClient: privateResolver(
-      async (_: any, args: UpdateMyClientMutationArgs, ctx: ContextWithUser): Promise<Rate_client | null> => {
+      async (_: any, args: UpdateMyClientMutationArgs, ctx: ContextWithUser): Promise<ClientResponse> => {
         try {
           const prevClient = await ctx.prisma.rate_client({ id: args.clientId });
+
+          if (!prevClient) {
+            return { ok: false, error: "Not existing client", client: null };
+          }
+
+          if (args.name) {
+            const checkIfExist = await ctx.prisma.rate_clients({ where: { name: args.name } });
+            if (checkIfExist.length > 0) {
+              return { ok: false, error: "Already exists", client: null };
+            }
+          }
 
           const client = await ctx.prisma.updateRate_client({
             data: {
@@ -22,9 +32,9 @@ export default {
             }
           });
 
-          return client;
+          return { ok: true, error: null, client };
         } catch (e) {
-          return null;
+          return { ok: false, error: "Failed to update", client: null };
         }
       }
     )

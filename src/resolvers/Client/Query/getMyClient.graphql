@@ -1,3 +1,9 @@
 type Query {
-  getMyClient(clientId: Int!): Client
+  getMyClient(clientId: Int!): ClientResponse!
+}
+
+type ClientResponse {
+  ok: Boolean!
+  error: String
+  client: Client
 }

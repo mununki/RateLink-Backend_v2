@@ -1,6 +1,6 @@
 import { Rate_clientConnection, Rate_clientOrderByInput } from "../../../../generated/prisma-client";
 import { GetMyClientsQueryArgs } from "../../../types/graph";
-import { ClientResponse, ContextWithUser } from "../../../types/resolver";
+import { ClientsResponse, ContextWithUser } from "../../../types/resolver";
 import privateResolver from "../../../util/privateResolver";
 
 interface IClientQueryParams {
@@ -19,7 +19,7 @@ interface IClientQueryParams {
 export default {
   Query: {
     getMyClients: privateResolver(
-      async (_: any, args: GetMyClientsQueryArgs, ctx: ContextWithUser): Promise<ClientResponse> => {
+      async (_: any, args: GetMyClientsQueryArgs, ctx: ContextWithUser): Promise<ClientsResponse> => {
         const queryParams: IClientQueryParams = {
           orderBy: "recordedDate_DESC",
           where: {

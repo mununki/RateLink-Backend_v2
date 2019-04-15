@@ -1,7 +1,5 @@
 # RateLink - Backend
 
-## https://www.rate-link.com
-
 ## Target
 
 ### 1. Refactory the existing RateLink Backend with new tech stack.
@@ -28,3 +26,4 @@
 - [x] Query each field for autocomplete in front-end
 - [x] Rate Mutation (create, update)
 - [x] Query for charts
+- [x] Client management (pagination with relay, input, edit)

@@ -1,8 +1,8 @@
 type Query {
-  getMyClients(skip: Int, before: String, last: Int, after: String, first: Int, search: String): ClientResponse
+  getMyClients(skip: Int, before: String, last: Int, after: String, first: Int, search: String): ClientsResponse
 }
 
-type ClientResponse {
+type ClientsResponse {
   ok: Boolean!
   count: Int!
   data: Rate_clientConnection

@@ -1,17 +1,16 @@
-import { Rate_client } from "../../../../generated/prisma-client";
 import { GetMyClientQueryArgs } from "../../../types/graph";
-import { ContextWithUser } from "../../../types/resolver";
+import { ClientResponse, ContextWithUser } from "../../../types/resolver";
 import privateResolver from "../../../util/privateResolver";
 
 export default {
   Query: {
     getMyClient: privateResolver(
-      async (_: any, args: GetMyClientQueryArgs, ctx: ContextWithUser): Promise<Rate_client | null> => {
+      async (_: any, args: GetMyClientQueryArgs, ctx: ContextWithUser): Promise<ClientResponse> => {
         try {
           const client = await ctx.prisma.rate_client({ id: args.clientId });
-          return client;
+          return { ok: true, error: null, client };
         } catch (e) {
-          return null;
+          return { ok: false, error: "Not existing client", client: null };
         }
       }
     )
