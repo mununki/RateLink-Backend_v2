@@ -8,7 +8,9 @@ export default {
     saveMyClient: privateResolver(
       async (_: any, args: SaveMyClientMutationArgs, ctx: ContextWithUser): Promise<ClientResponse> => {
         try {
-          const checkIfExist = await ctx.prisma.rate_clients({ where: { name: args.name } });
+          const checkIfExist = await ctx.prisma.rate_clients({
+            where: { name: args.name, salesman: { id_in: ctx.user.id } }
+          });
 
           if (checkIfExist.length > 0) {
             return { ok: false, error: "Already exists", client: null };
